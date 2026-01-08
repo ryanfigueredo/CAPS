@@ -35,7 +35,7 @@ function getPhosphorIconHTML(
 const iconMap = {
   mensagem: "chat-circle-dots",
   biblioteca: "book-open",
-  meditacao: "yoga",
+  meditacao: "lotus",
   quiz: "clipboard-text",
   voltar: "arrow-left",
   carregando: "spinner",
