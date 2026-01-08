@@ -37,6 +37,10 @@
                 <i class="ph ph-clipboard-text ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
                 Questionários
             </button>
+            <button class="tab-button" onclick="mostrarAba('avaliacoes')">
+                <i class="ph ph-star ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                Avaliações
+            </button>
         </div>
 
         <div id="alert-container"></div>
@@ -153,6 +157,23 @@
             <div class="items-list">
                 <h2>Meditações Cadastradas</h2>
                 <div id="lista-meditacoes"></div>
+            </div>
+        </div>
+
+        <!-- Aba Avaliações -->
+        <div id="aba-avaliacoes" class="aba-conteudo" style="display: none;">
+            <div class="items-list">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Avaliações de Atendimento</h2>
+                    <button onclick="carregarAvaliacoes()" class="btn btn-primary btn-small">Atualizar</button>
+                </div>
+                
+                <div id="avaliacoes-estatisticas" style="background: var(--light-color); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3>Estatísticas Gerais</h3>
+                    <div id="stats-avaliacoes-content">Carregando...</div>
+                </div>
+
+                <div id="lista-avaliacoes"></div>
             </div>
         </div>
 
@@ -494,6 +515,131 @@
             } catch (error) {
                 console.error('Erro ao carregar quiz:', error);
                 document.getElementById('lista-quiz').innerHTML = '<p>Erro ao carregar respostas.</p>';
+            }
+        }
+
+        // Avaliações
+        async function carregarAvaliacoes() {
+            try {
+                // Carregar estatísticas
+                const statsResponse = await fetch('/api/admin/avaliacoes/estatisticas');
+                const stats = await statsResponse.json();
+                
+                const statsContent = document.getElementById('stats-avaliacoes-content');
+                if (stats.total) {
+                    statsContent.innerHTML = `
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Total de Avaliações</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">${stats.total}</p>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Atendimento</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">${(stats.media_atendimento || 0).toFixed(1)} ⭐</p>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Recepção</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">${(stats.media_recepcao || 0).toFixed(1)} ⭐</p>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Funcionários</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">${(stats.media_funcionarios || 0).toFixed(1)} ⭐</p>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Médico</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">${(stats.media_medico || 0).toFixed(1)} ⭐</p>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Psicólogos</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">${(stats.media_psicologos || 0).toFixed(1)} ⭐</p>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Farmácia</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">${(stats.media_farmacia || 0).toFixed(1)} ⭐</p>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px;">
+                                <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Recomendação (0-10)</p>
+                                <p style="font-size: 1.5rem; font-weight: 600; color: var(--secondary-color);">${(stats.media_recomendacao || 0).toFixed(1)}</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    statsContent.innerHTML = '<p>Nenhuma avaliação recebida ainda.</p>';
+                }
+
+                // Carregar avaliações
+                const response = await fetch('/api/admin/avaliacoes');
+                const avaliacoes = await response.json();
+                const container = document.getElementById('lista-avaliacoes');
+                
+                if (avaliacoes.length === 0) {
+                    container.innerHTML = '<p>Nenhuma avaliação cadastrada.</p>';
+                    return;
+                }
+
+                container.innerHTML = avaliacoes.map(av => {
+                    const data = new Date(av.dataCriacao).toLocaleString('pt-BR');
+                    
+                    function getStarRating(value) {
+                        let stars = '';
+                        for (let i = 1; i <= 5; i++) {
+                            if (i <= value) {
+                                stars += '<i class="ph ph-star-fill" style="color: #FFC107; font-size: 1.2rem;"></i>';
+                            } else {
+                                stars += '<i class="ph ph-star" style="color: #ddd; font-size: 1.2rem;"></i>';
+                            }
+                        }
+                        return stars;
+                    }
+                    
+                    return `
+                        <div class="item-card">
+                            <div style="flex: 1;">
+                                <h4>Avaliação - ${data}</h4>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
+                                    <div>
+                                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Atendimento</p>
+                                        <div>${getStarRating(av.atendimento)}</div>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Recepção</p>
+                                        <div>${getStarRating(av.recepcao)}</div>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Funcionários</p>
+                                        <div>${getStarRating(av.funcionarios)}</div>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Médico</p>
+                                        <div>${getStarRating(av.medico)}</div>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Psicólogos</p>
+                                        <div>${getStarRating(av.psicologos)}</div>
+                                    </div>
+                                    <div>
+                                        <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Farmácia</p>
+                                        <div>${getStarRating(av.farmacia)}</div>
+                                    </div>
+                                </div>
+                                <p style="margin-top: 15px; font-size: 0.9rem;">
+                                    <strong>Recomendação:</strong> <span style="font-size: 1.2rem; font-weight: 600; color: var(--secondary-color);">${av.recomendacao}/10</span>
+                                </p>
+                                ${av.sugestao ? `
+                                    <details style="margin-top: 15px;">
+                                        <summary style="cursor: pointer; color: var(--primary-color); font-weight: 600;">Ver sugestão</summary>
+                                        <div style="margin-top: 10px; padding: 15px; background: white; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                                            <p style="font-size: 0.95rem; line-height: 1.6;">${av.sugestao}</p>
+                                        </div>
+                                    </details>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar avaliações:', error);
+                document.getElementById('lista-avaliacoes').innerHTML = '<p>Erro ao carregar avaliações.</p>';
             }
         }
 

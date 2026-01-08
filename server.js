@@ -346,6 +346,73 @@ app.get('/api/admin/quiz/estatisticas', async (req, res) => {
   }
 });
 
+// ========== ROTAS AVALIAÇÃO ==========
+
+// Salvar avaliação
+app.post('/api/avaliacao', async (req, res) => {
+  try {
+    const { atendimento, recepcao, funcionarios, medico, psicologos, farmacia, recomendacao, sugestao } = req.body;
+    const avaliacao = await prisma.avaliacao.create({
+      data: {
+        atendimento,
+        recepcao,
+        funcionarios,
+        medico,
+        psicologos,
+        farmacia,
+        recomendacao,
+        sugestao: sugestao || null
+      }
+    });
+    res.json({ id: avaliacao.id, success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Buscar todas as avaliações (admin)
+app.get('/api/admin/avaliacoes', async (req, res) => {
+  try {
+    const avaliacoes = await prisma.avaliacao.findMany({
+      orderBy: { dataCriacao: 'desc' }
+    });
+    res.json(avaliacoes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Estatísticas das avaliações (admin)
+app.get('/api/admin/avaliacoes/estatisticas', async (req, res) => {
+  try {
+    const total = await prisma.avaliacao.count();
+    const stats = await prisma.avaliacao.aggregate({
+      _avg: {
+        atendimento: true,
+        recepcao: true,
+        funcionarios: true,
+        medico: true,
+        psicologos: true,
+        farmacia: true,
+        recomendacao: true
+      }
+    });
+
+    res.json({
+      total,
+      media_atendimento: stats._avg.atendimento || 0,
+      media_recepcao: stats._avg.recepcao || 0,
+      media_funcionarios: stats._avg.funcionarios || 0,
+      media_medico: stats._avg.medico || 0,
+      media_psicologos: stats._avg.psicologos || 0,
+      media_farmacia: stats._avg.farmacia || 0,
+      media_recomendacao: stats._avg.recomendacao || 0
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

@@ -67,3 +67,18 @@ model QuizResposta {
   @@map("quiz_respostas")
 }
 
+model Avaliacao {
+  id                    Int      @id @default(autoincrement())
+  atendimento           Int      // 1-5 estrelas
+  recepcao              Int      // 1-5 estrelas
+  funcionarios          Int      // 1-5 estrelas
+  medico                Int      // 1-5 estrelas
+  psicologos            Int      // 1-5 estrelas
+  farmacia              Int      // 1-5 estrelas
+  recomendacao          Int      // 0-10
+  sugestao              String?  // Texto livre
+  dataCriacao           DateTime @default(now()) @map("data_criacao")
+  
+  @@map("avaliacoes")
+}
+
