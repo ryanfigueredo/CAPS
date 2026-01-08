@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Digital - CAPS Digital</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content-page">
+            <a href="index.html" class="back-button">← Voltar</a>
+            <h1 class="page-title">📚 Biblioteca Digital</h1>
+            
+            <div id="biblioteca-container" class="content-grid">
+                <div class="empty-state">
+                    <div class="icon">📖</div>
+                    <p>Carregando conteúdo...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function carregarBiblioteca() {
+            try {
+                const response = await fetch('/api/biblioteca');
+                const itens = await response.json();
+                
+                const container = document.getElementById('biblioteca-container');
+                
+                if (itens.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">📖</div>
+                            <p>Nenhum conteúdo disponível no momento.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = itens.map(item => {
+                    // Função para extrair ID do YouTube
+                    function getYouTubeId(url) {
+                        if (!url) return null;
+                        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                        const match = url.match(regExp);
+                        return (match && match[2].length === 11) ? match[2] : null;
+                    }
+
+                    let conteudo = `
+                        <div class="content-item">
+                            <h3>${item.titulo}</h3>
+                            ${item.descricao ? `<p>${item.descricao}</p>` : ''}
+                            <p class="meta">Tipo: ${item.tipo}</p>
+                    `;
+                    
+                    // Se for vídeo e tiver URL do YouTube, mostrar player
+                    if (item.tipo === 'Vídeo' && item.url) {
+                        const videoId = getYouTubeId(item.url);
+                        if (videoId) {
+                            conteudo += `
+                                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin-top: 15px; border-radius: 10px;">
+                                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                                            src="https://www.youtube.com/embed/${videoId}" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>
+                            `;
+                        } else {
+                            conteudo += `<a href="${item.url}" target="_blank" class="btn btn-primary" style="margin-top: 10px; display: inline-block; text-decoration: none;">Assistir vídeo</a>`;
+                        }
+                    } else if (item.url) {
+                        conteudo += `<a href="${item.url}" target="_blank" class="btn btn-primary" style="margin-top: 10px; display: inline-block; text-decoration: none;">Acessar conteúdo</a>`;
+                    }
+                    
+                    if (item.arquivo) {
+                        conteudo += `<a href="/uploads/${item.arquivo}" target="_blank" class="btn btn-primary" style="margin-top: 10px; display: inline-block; text-decoration: none; margin-left: 10px;">Baixar arquivo</a>`;
+                    }
+                    
+                    conteudo += `</div>`;
+                    return conteudo;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar biblioteca:', error);
+                document.getElementById('biblioteca-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚠️</div>
+                        <p>Erro ao carregar conteúdo. Tente novamente mais tarde.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        carregarBiblioteca();
+    </script>
+</body>
+</html>
+

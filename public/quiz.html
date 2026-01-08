@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionário de Saúde - CAPS Digital</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .quiz-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 40px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-question {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--light-color);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .quiz-question h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            font-size: 1.1rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: #f0f7ff;
+        }
+
+        .quiz-option input[type="radio"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: #e3f2fd;
+        }
+
+        .quiz-progress {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .quiz-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .quiz-result {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+
+        .result-message {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin-bottom: 30px;
+        }
+
+        .result-recommendation {
+            background: var(--light-color);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary-color);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="quiz-container">
+            <a href="index.html" class="back-button">← Voltar</a>
+            <h1 class="page-title">📋 Questionário de Saúde Mental</h1>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Responda as perguntas com honestidade. Seus dados são confidenciais.
+            </p>
+
+            <div id="quiz-form" style="display: none;">
+                <div class="quiz-progress">
+                    <p>Pergunta <span id="current-question">1</span> de <span id="total-questions">13</span></p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div id="questions-container"></div>
+
+                <div class="quiz-actions">
+                    <button id="prev-btn" class="btn btn-primary" onclick="previousQuestion()" style="display: none;">← Anterior</button>
+                    <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">Próxima →</button>
+                    <button id="submit-btn" class="btn btn-success" onclick="submitQuiz()" style="display: none;">Finalizar</button>
+                </div>
+            </div>
+
+            <div id="quiz-result" style="display: none;">
+                <div class="quiz-result">
+                    <h2>Obrigado por responder o questionário!</h2>
+                    <div class="result-score" id="result-score">0</div>
+                    <div class="result-message" id="result-message"></div>
+                    <div class="result-recommendation" id="result-recommendation"></div>
+                    <div style="margin-top: 30px;">
+                        <a href="index.html" class="btn btn-primary">Voltar ao Início</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="quiz-loading" style="text-align: center; padding: 40px;">
+                <p>Carregando questionário...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            "Você tem tido dores de cabeça frequentemente?",
+            "Tem tido falta de apetite?",
+            "Você tem dormido mal?",
+            "Você tem se assustado com facilidade?",
+            "Tem tremores nas mãos?",
+            "Você tem sentido nervosismo, tensão e/ou preocupação com frequência?",
+            "Tem tido má digestão?",
+            "Você está tendo dificuldade de pensar com clareza?",
+            "Tem se sentido triste ultimamente?",
+            "Você tem chorado mais do que de costume?",
+            "Encontra dificuldades para realizar com satisfação suas atividades diárias?",
+            "Ultimamente, você tem perdido o interesse pelas coisas?",
+            "Sente cansaço o tempo todo?"
+        ];
+
+        const options = [
+            { value: 0, label: "Nunca" },
+            { value: 1, label: "Raramente" },
+            { value: 2, label: "Às vezes" },
+            { value: 3, label: "Frequentemente" },
+            { value: 4, label: "Sempre" }
+        ];
+
+        let currentQuestionIndex = 0;
+        let answers = new Array(questions.length).fill(null);
+
+        function initQuiz() {
+            document.getElementById('quiz-loading').style.display = 'none';
+            document.getElementById('quiz-form').style.display = 'block';
+            showQuestion(0);
+        }
+
+        function showQuestion(index) {
+            currentQuestionIndex = index;
+            const container = document.getElementById('questions-container');
+            const question = questions[index];
+            const currentAnswer = answers[index];
+
+            container.innerHTML = `
+                <div class="quiz-question">
+                    <h3>${index + 1}. ${question}</h3>
+                    <div class="quiz-options">
+                        ${options.map((opt, optIndex) => `
+                            <label class="quiz-option ${currentAnswer === opt.value ? 'selected' : ''}" 
+                                   onclick="selectOption(${opt.value})">
+                                <input type="radio" name="question-${index}" value="${opt.value}" 
+                                       ${currentAnswer === opt.value ? 'checked' : ''}>
+                                <span>${opt.label}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // Atualizar progresso
+            const progress = ((index + 1) / questions.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('current-question').textContent = index + 1;
+            document.getElementById('total-questions').textContent = questions.length;
+
+            // Botões de navegação
+            document.getElementById('prev-btn').style.display = index === 0 ? 'none' : 'inline-block';
+            document.getElementById('next-btn').style.display = index === questions.length - 1 ? 'none' : 'inline-block';
+            document.getElementById('submit-btn').style.display = index === questions.length - 1 ? 'inline-block' : 'none';
+        }
+
+        function selectOption(value) {
+            answers[currentQuestionIndex] = value;
+            
+            // Atualizar visual
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.currentTarget.classList.add('selected');
+            event.currentTarget.querySelector('input[type="radio"]').checked = true;
+        }
+
+        function nextQuestion() {
+            if (answers[currentQuestionIndex] === null) {
+                alert('Por favor, selecione uma resposta antes de continuar.');
+                return;
+            }
+            if (currentQuestionIndex < questions.length - 1) {
+                showQuestion(currentQuestionIndex + 1);
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                showQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        async function submitQuiz() {
+            if (answers[currentQuestionIndex] === null) {
+                alert('Por favor, selecione uma resposta antes de finalizar.');
+                return;
+            }
+
+            // Verificar se todas as perguntas foram respondidas
+            if (answers.some(a => a === null)) {
+                if (!confirm('Algumas perguntas não foram respondidas. Deseja finalizar mesmo assim?')) {
+                    return;
+                }
+            }
+
+            // Calcular pontuação (0-52)
+            const totalScore = answers.reduce((sum, ans) => sum + (ans || 0), 0);
+            const percentage = Math.round((totalScore / (questions.length * 4)) * 100);
+
+            // Determinar mensagem e recomendação
+            let message, recommendation;
+            if (totalScore <= 13) {
+                message = "Seu bem-estar parece estar em bom estado!";
+                recommendation = "Continue cuidando da sua saúde mental. Pratique atividades que te fazem bem e mantenha uma rotina saudável.";
+            } else if (totalScore <= 26) {
+                message = "Você está apresentando alguns sinais de desconforto. É importante ficar atento aos seus sentimentos.";
+                recommendation = "Considere conversar com alguém de confiança sobre como você está se sentindo. Práticas de relaxamento e autocuidado podem ajudar.";
+            } else if (totalScore <= 39) {
+                message = "Você está apresentando sinais significativos de desconforto emocional.";
+                recommendation = "Recomendamos que você busque apoio profissional. Entre em contato com o CAPS ou procure um profissional de saúde mental.";
+            } else {
+                message = "Você está apresentando sinais importantes que merecem atenção imediata.";
+                recommendation = "É muito importante que você busque ajuda profissional o quanto antes. Entre em contato com o CAPS, procure um psicólogo ou psiquiatra, ou ligue para o CVV (188). Você não está sozinho(a).";
+            }
+
+            // Salvar no servidor
+            try {
+                await fetch('/api/quiz/respostas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        respostas: answers,
+                        pontuacao: totalScore,
+                        porcentagem: percentage
+                    })
+                });
+            } catch (error) {
+                console.error('Erro ao salvar respostas:', error);
+            }
+
+            // Mostrar resultado
+            document.getElementById('quiz-form').style.display = 'none';
+            document.getElementById('quiz-result').style.display = 'block';
+            document.getElementById('result-score').textContent = totalScore + ' pontos';
+            document.getElementById('result-message').textContent = message;
+            document.getElementById('result-recommendation').innerHTML = `<strong>Recomendação:</strong><br>${recommendation}`;
+        }
+
+        // Inicializar quando a página carregar
+        window.addEventListener('load', () => {
+            setTimeout(initQuiz, 500);
+        });
+    </script>
+</body>
+</html>
+

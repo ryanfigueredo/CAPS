@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - CAPS Digital</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Painel Administrativo - CAPS Digital</h1>
+            <a href="/" class="btn btn-primary" style="text-decoration: none;">Ver Site</a>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="tab-button active" onclick="mostrarAba('mensagens')">Mensagens</button>
+            <button class="tab-button" onclick="mostrarAba('biblioteca')">Biblioteca</button>
+            <button class="tab-button" onclick="mostrarAba('meditacoes')">Meditações</button>
+            <button class="tab-button" onclick="mostrarAba('quiz')">Questionários</button>
+        </div>
+
+        <div id="alert-container"></div>
+
+        <!-- Aba Mensagens -->
+        <div id="aba-mensagens" class="aba-conteudo">
+            <div class="form-container">
+                <h2>Adicionar Nova Mensagem</h2>
+                <form id="form-mensagem">
+                    <div class="form-group">
+                        <label for="msg-titulo">Título</label>
+                        <input type="text" id="msg-titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="msg-conteudo">Conteúdo</label>
+                        <textarea id="msg-conteudo" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="msg-autor">Autor (opcional)</label>
+                        <input type="text" id="msg-autor">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar Mensagem</button>
+                </form>
+            </div>
+
+            <div class="items-list">
+                <h2>Mensagens Cadastradas</h2>
+                <div id="lista-mensagens"></div>
+            </div>
+        </div>
+
+        <!-- Aba Biblioteca -->
+        <div id="aba-biblioteca" class="aba-conteudo" style="display: none;">
+            <div class="form-container">
+                <h2>Adicionar Novo Item à Biblioteca</h2>
+                <form id="form-biblioteca">
+                    <div class="form-group">
+                        <label for="bib-titulo">Título</label>
+                        <input type="text" id="bib-titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bib-descricao">Descrição</label>
+                        <textarea id="bib-descricao"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="bib-tipo">Tipo</label>
+                        <select id="bib-tipo" required>
+                            <option value="Artigo">Artigo</option>
+                            <option value="Vídeo">Vídeo</option>
+                            <option value="Áudio">Áudio</option>
+                            <option value="PDF">PDF</option>
+                            <option value="Link">Link</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bib-url">URL (opcional)</label>
+                        <input type="url" id="bib-url" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label for="bib-arquivo">Nome do arquivo (opcional)</label>
+                        <input type="text" id="bib-arquivo" placeholder="arquivo.pdf">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar Item</button>
+                </form>
+            </div>
+
+            <div class="items-list">
+                <h2>Itens da Biblioteca</h2>
+                <div id="lista-biblioteca"></div>
+            </div>
+        </div>
+
+        <!-- Aba Meditações -->
+        <div id="aba-meditacoes" class="aba-conteudo" style="display: none;">
+            <div class="form-container">
+                <h2>Adicionar Nova Meditação</h2>
+                <form id="form-meditacao">
+                    <div class="form-group">
+                        <label for="med-titulo">Título</label>
+                        <input type="text" id="med-titulo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="med-descricao">Descrição</label>
+                        <textarea id="med-descricao"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="med-duracao">Duração (minutos)</label>
+                        <input type="number" id="med-duracao" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="med-youtube">URL do YouTube (opcional)</label>
+                        <input type="url" id="med-youtube" placeholder="https://www.youtube.com/watch?v=... ou https://youtu.be/...">
+                        <small style="color: #666;">Cole o link completo do vídeo do YouTube</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="med-audio">Nome do arquivo de áudio (opcional)</label>
+                        <input type="text" id="med-audio" placeholder="meditacao.mp3">
+                        <small style="color: #666;">Coloque o arquivo na pasta uploads/audios/ (use se não tiver YouTube)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="med-imagem">URL da imagem (opcional)</label>
+                        <input type="url" id="med-imagem" placeholder="https://...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar Meditação</button>
+                </form>
+            </div>
+
+            <div class="items-list">
+                <h2>Meditações Cadastradas</h2>
+                <div id="lista-meditacoes"></div>
+            </div>
+        </div>
+
+        <!-- Aba Questionários -->
+        <div id="aba-quiz" class="aba-conteudo" style="display: none;">
+            <div class="items-list">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Respostas dos Questionários</h2>
+                    <button onclick="carregarQuiz()" class="btn btn-primary btn-small">Atualizar</button>
+                </div>
+                
+                <div id="quiz-estatisticas" style="background: var(--light-color); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <h3>Estatísticas</h3>
+                    <div id="stats-content">Carregando...</div>
+                </div>
+
+                <div id="lista-quiz"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar login
+        if (!localStorage.getItem('admin_logged')) {
+            window.location.href = '/admin';
+        }
+
+        function mostrarAba(aba) {
+            // Esconder todas as abas
+            document.querySelectorAll('.aba-conteudo').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            
+            // Mostrar aba selecionada
+            document.getElementById(`aba-${aba}`).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        function mostrarAlerta(mensagem, tipo = 'success') {
+            const container = document.getElementById('alert-container');
+            container.innerHTML = `
+                <div class="alert alert-${tipo}">
+                    ${mensagem}
+                </div>
+            `;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        // Mensagens
+        document.getElementById('form-mensagem').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dados = {
+                titulo: document.getElementById('msg-titulo').value,
+                conteudo: document.getElementById('msg-conteudo').value,
+                autor: document.getElementById('msg-autor').value
+            };
+
+            try {
+                const response = await fetch('/api/admin/mensagens', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    mostrarAlerta('Mensagem adicionada com sucesso!');
+                    e.target.reset();
+                    carregarMensagens();
+                }
+            } catch (error) {
+                mostrarAlerta('Erro ao adicionar mensagem', 'error');
+            }
+        });
+
+        async function carregarMensagens() {
+            try {
+                const response = await fetch('/api/admin/mensagens');
+                const mensagens = await response.json();
+                const container = document.getElementById('lista-mensagens');
+                
+                if (mensagens.length === 0) {
+                    container.innerHTML = '<p>Nenhuma mensagem cadastrada.</p>';
+                    return;
+                }
+
+                container.innerHTML = mensagens.map(msg => `
+                    <div class="item-card">
+                        <div>
+                            <h4>${msg.titulo} ${msg.ativo ? '' : '(Inativo)'}</h4>
+                            <p>${msg.conteudo.substring(0, 100)}...</p>
+                            ${msg.autor ? `<p style="font-size: 0.8rem; color: #999;">Autor: ${msg.autor}</p>` : ''}
+                        </div>
+                        <div class="item-actions">
+                            <button onclick="editarMensagem(${msg.id})" class="btn btn-primary btn-small">Editar</button>
+                            <button onclick="deletarMensagem(${msg.id})" class="btn btn-danger btn-small">Excluir</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar mensagens:', error);
+            }
+        }
+
+        async function deletarMensagem(id) {
+            if (!confirm('Tem certeza que deseja excluir esta mensagem?')) return;
+            try {
+                const response = await fetch(`/api/admin/mensagens/${id}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.success) {
+                    mostrarAlerta('Mensagem excluída com sucesso!');
+                    carregarMensagens();
+                }
+            } catch (error) {
+                mostrarAlerta('Erro ao excluir mensagem', 'error');
+            }
+        }
+
+        // Biblioteca
+        document.getElementById('form-biblioteca').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dados = {
+                titulo: document.getElementById('bib-titulo').value,
+                descricao: document.getElementById('bib-descricao').value,
+                tipo: document.getElementById('bib-tipo').value,
+                url: document.getElementById('bib-url').value,
+                arquivo: document.getElementById('bib-arquivo').value
+            };
+
+            try {
+                const response = await fetch('/api/admin/biblioteca', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    mostrarAlerta('Item adicionado com sucesso!');
+                    e.target.reset();
+                    carregarBiblioteca();
+                }
+            } catch (error) {
+                mostrarAlerta('Erro ao adicionar item', 'error');
+            }
+        });
+
+        async function carregarBiblioteca() {
+            try {
+                const response = await fetch('/api/admin/biblioteca');
+                const itens = await response.json();
+                const container = document.getElementById('lista-biblioteca');
+                
+                if (itens.length === 0) {
+                    container.innerHTML = '<p>Nenhum item cadastrado.</p>';
+                    return;
+                }
+
+                container.innerHTML = itens.map(item => `
+                    <div class="item-card">
+                        <div>
+                            <h4>${item.titulo} ${item.ativo ? '' : '(Inativo)'}</h4>
+                            <p>${item.descricao || 'Sem descrição'}</p>
+                            <p style="font-size: 0.8rem; color: #999;">Tipo: ${item.tipo}</p>
+                        </div>
+                        <div class="item-actions">
+                            <button onclick="editarBiblioteca(${item.id})" class="btn btn-primary btn-small">Editar</button>
+                            <button onclick="deletarBiblioteca(${item.id})" class="btn btn-danger btn-small">Excluir</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar biblioteca:', error);
+            }
+        }
+
+        async function deletarBiblioteca(id) {
+            if (!confirm('Tem certeza que deseja excluir este item?')) return;
+            try {
+                const response = await fetch(`/api/admin/biblioteca/${id}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.success) {
+                    mostrarAlerta('Item excluído com sucesso!');
+                    carregarBiblioteca();
+                }
+            } catch (error) {
+                mostrarAlerta('Erro ao excluir item', 'error');
+            }
+        }
+
+        // Meditações
+        document.getElementById('form-meditacao').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const dados = {
+                titulo: document.getElementById('med-titulo').value,
+                descricao: document.getElementById('med-descricao').value,
+                duracao: document.getElementById('med-duracao').value,
+                url_youtube: document.getElementById('med-youtube').value,
+                arquivo_audio: document.getElementById('med-audio').value,
+                imagem: document.getElementById('med-imagem').value
+            };
+
+            try {
+                const response = await fetch('/api/admin/meditacoes', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(dados)
+                });
+                const data = await response.json();
+                if (data.success) {
+                    mostrarAlerta('Meditação adicionada com sucesso!');
+                    e.target.reset();
+                    carregarMeditacoes();
+                }
+            } catch (error) {
+                mostrarAlerta('Erro ao adicionar meditação', 'error');
+            }
+        });
+
+        async function carregarMeditacoes() {
+            try {
+                const response = await fetch('/api/admin/meditacoes');
+                const meditacoes = await response.json();
+                const container = document.getElementById('lista-meditacoes');
+                
+                if (meditacoes.length === 0) {
+                    container.innerHTML = '<p>Nenhuma meditação cadastrada.</p>';
+                    return;
+                }
+
+                container.innerHTML = meditacoes.map(med => {
+                    let tipoMidia = '';
+                    if (med.url_youtube) {
+                        tipoMidia = '<span style="font-size: 0.8rem; color: #d32f2f;">📺 YouTube</span>';
+                    } else if (med.arquivo_audio) {
+                        tipoMidia = '<span style="font-size: 0.8rem; color: #1976d2;">🎵 Áudio</span>';
+                    }
+                    
+                    return `
+                        <div class="item-card">
+                            <div>
+                                <h4>${med.titulo} ${med.ativo ? '' : '(Inativo)'}</h4>
+                                <p>${med.descricao || 'Sem descrição'}</p>
+                                ${med.duracao ? `<p style="font-size: 0.8rem; color: #999;">Duração: ${med.duracao} minutos</p>` : ''}
+                                ${tipoMidia ? `<p style="margin-top: 5px;">${tipoMidia}</p>` : ''}
+                            </div>
+                            <div class="item-actions">
+                                <button onclick="editarMeditacao(${med.id})" class="btn btn-primary btn-small">Editar</button>
+                                <button onclick="deletarMeditacao(${med.id})" class="btn btn-danger btn-small">Excluir</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar meditações:', error);
+            }
+        }
+
+        async function deletarMeditacao(id) {
+            if (!confirm('Tem certeza que deseja excluir esta meditação?')) return;
+            try {
+                const response = await fetch(`/api/admin/meditacoes/${id}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.success) {
+                    mostrarAlerta('Meditação excluída com sucesso!');
+                    carregarMeditacoes();
+                }
+            } catch (error) {
+                mostrarAlerta('Erro ao excluir meditação', 'error');
+            }
+        }
+
+        // Quiz
+        async function carregarQuiz() {
+            try {
+                // Carregar estatísticas
+                const statsResponse = await fetch('/api/admin/quiz/estatisticas');
+                const stats = await statsResponse.json();
+                
+                const statsContent = document.getElementById('stats-content');
+                if (stats.total) {
+                    statsContent.innerHTML = `
+                        <p><strong>Total de questionários respondidos:</strong> ${stats.total}</p>
+                        <p><strong>Pontuação média:</strong> ${Math.round(stats.media_pontuacao || 0)} pontos</p>
+                        <p><strong>Porcentagem média:</strong> ${Math.round(stats.media_porcentagem || 0)}%</p>
+                        <p><strong>Pontuação mínima:</strong> ${stats.min_pontuacao || 0} | <strong>Máxima:</strong> ${stats.max_pontuacao || 0}</p>
+                    `;
+                } else {
+                    statsContent.innerHTML = '<p>Nenhum questionário respondido ainda.</p>';
+                }
+
+                // Carregar respostas
+                const response = await fetch('/api/admin/quiz');
+                const respostas = await response.json();
+                const container = document.getElementById('lista-quiz');
+                
+                if (respostas.length === 0) {
+                    container.innerHTML = '<p>Nenhuma resposta cadastrada.</p>';
+                    return;
+                }
+
+                container.innerHTML = respostas.map(resp => {
+                    const data = new Date(resp.data_criacao).toLocaleString('pt-BR');
+                    const nivel = resp.pontuacao <= 13 ? '🟢 Baixo' : 
+                                 resp.pontuacao <= 26 ? '🟡 Moderado' : 
+                                 resp.pontuacao <= 39 ? '🟠 Alto' : '🔴 Muito Alto';
+                    
+                    return `
+                        <div class="item-card">
+                            <div style="flex: 1;">
+                                <h4>Questionário - ${data}</h4>
+                                <p><strong>Pontuação:</strong> ${resp.pontuacao} pontos (${resp.porcentagem}%)</p>
+                                <p><strong>Nível:</strong> ${nivel}</p>
+                                <details style="margin-top: 10px;">
+                                    <summary style="cursor: pointer; color: var(--primary-color);">Ver respostas detalhadas</summary>
+                                    <div style="margin-top: 10px; padding: 10px; background: white; border-radius: 5px;">
+                                        ${resp.respostas.map((r, i) => `
+                                            <p style="font-size: 0.9rem; margin: 5px 0;">
+                                                ${i + 1}. ${['Nunca', 'Raramente', 'Às vezes', 'Frequentemente', 'Sempre'][r] || 'Não respondido'}
+                                            </p>
+                                        `).join('')}
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar quiz:', error);
+                document.getElementById('lista-quiz').innerHTML = '<p>Erro ao carregar respostas.</p>';
+            }
+        }
+
+        // Carregar dados iniciais
+        carregarMensagens();
+    </script>
+</body>
+</html>
+

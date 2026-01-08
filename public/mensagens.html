@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensagens Motivacionais - CAPS Digital</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content-page">
+            <a href="index.html" class="back-button">← Voltar</a>
+            <h1 class="page-title">💬 Mensagens Motivacionais</h1>
+            
+            <div id="mensagens-container" class="content-grid">
+                <div class="empty-state">
+                    <div class="icon">💭</div>
+                    <p>Carregando mensagens...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function carregarMensagens() {
+            try {
+                const response = await fetch('/api/mensagens');
+                const mensagens = await response.json();
+                
+                const container = document.getElementById('mensagens-container');
+                
+                if (mensagens.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">💭</div>
+                            <p>Nenhuma mensagem disponível no momento.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = mensagens.map(msg => `
+                    <div class="content-item">
+                        <h3>${msg.titulo}</h3>
+                        <p>${msg.conteudo}</p>
+                        ${msg.autor ? `<p class="meta">— ${msg.autor}</p>` : ''}
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Erro ao carregar mensagens:', error);
+                document.getElementById('mensagens-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚠️</div>
+                        <p>Erro ao carregar mensagens. Tente novamente mais tarde.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        carregarMensagens();
+    </script>
+</body>
+</html>
+

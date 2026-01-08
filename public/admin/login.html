@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Admin - CAPS Digital</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>🔐 Painel Administrativo</h1>
+        
+        <div id="alert-container"></div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="usuario">Usuário</label>
+                <input type="text" id="usuario" name="usuario" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Entrar</button>
+        </form>
+        
+        <p style="text-align: center; margin-top: 20px; color: #666; font-size: 0.9rem;">
+            Usuário padrão: admin | Senha: admin123
+        </p>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const usuario = document.getElementById('usuario').value;
+            const senha = document.getElementById('senha').value;
+            const alertContainer = document.getElementById('alert-container');
+            
+            try {
+                const response = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ usuario, senha })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    localStorage.setItem('admin_logged', 'true');
+                    window.location.href = '/admin/painel';
+                } else {
+                    alertContainer.innerHTML = `
+                        <div class="alert alert-error">
+                            ${data.error || 'Credenciais inválidas'}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                alertContainer.innerHTML = `
+                    <div class="alert alert-error">
+                        Erro ao fazer login. Tente novamente.
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
+

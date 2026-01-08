@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditação Guiada - CAPS Digital</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="content-page">
+            <a href="index.html" class="back-button">← Voltar</a>
+            <h1 class="page-title">🧘 Meditação Guiada</h1>
+            
+            <div id="meditacoes-container" class="content-grid">
+                <div class="empty-state">
+                    <div class="icon">🧘</div>
+                    <p>Carregando meditações...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function carregarMeditacoes() {
+            try {
+                const response = await fetch('/api/meditacoes');
+                const meditacoes = await response.json();
+                
+                const container = document.getElementById('meditacoes-container');
+                
+                if (meditacoes.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <div class="icon">🧘</div>
+                            <p>Nenhuma meditação disponível no momento.</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = meditacoes.map(med => {
+                    // Função para extrair ID do YouTube
+                    function getYouTubeId(url) {
+                        if (!url) return null;
+                        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                        const match = url.match(regExp);
+                        return (match && match[2].length === 11) ? match[2] : null;
+                    }
+
+                    let mediaContent = '';
+                    if (med.url_youtube) {
+                        const videoId = getYouTubeId(med.url_youtube);
+                        if (videoId) {
+                            mediaContent = `
+                                <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin-top: 15px; border-radius: 10px;">
+                                    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" 
+                                            src="https://www.youtube.com/embed/${videoId}" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                    </iframe>
+                                </div>
+                            `;
+                        } else {
+                            mediaContent = `<p style="margin-top: 15px;"><a href="${med.url_youtube}" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-block;">Assistir no YouTube</a></p>`;
+                        }
+                    } else if (med.arquivo_audio) {
+                        mediaContent = `
+                            <audio controls class="audio-player">
+                                <source src="/uploads/${med.arquivo_audio}" type="audio/mpeg">
+                                Seu navegador não suporta áudio.
+                            </audio>
+                        `;
+                    }
+
+                    return `
+                        <div class="content-item">
+                            <h3>${med.titulo}</h3>
+                            ${med.descricao ? `<p>${med.descricao}</p>` : ''}
+                            ${med.duracao ? `<p class="meta">Duração: ${med.duracao} minutos</p>` : ''}
+                            ${mediaContent}
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar meditações:', error);
+                document.getElementById('meditacoes-container').innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">⚠️</div>
+                        <p>Erro ao carregar meditações. Tente novamente mais tarde.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        carregarMeditacoes();
+    </script>
+</body>
+</html>
+
