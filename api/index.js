@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const path = require('path');
 const prisma = require('../prisma/client');
 
 const app = express();
@@ -34,6 +35,17 @@ async function initDatabase() {
 initDatabase();
 
 // ========== ROTAS PÚBLICAS ==========
+
+// Páginas HTML do Admin
+app.get('/admin', (req, res) => {
+  const filePath = path.resolve(__dirname, '../public/admin/login.html');
+  res.sendFile(filePath);
+});
+
+app.get('/admin/painel', (req, res) => {
+  const filePath = path.resolve(__dirname, '../public/admin/painel.html');
+  res.sendFile(filePath);
+});
 
 // API - Mensagens motivacionais
 app.get('/api/mensagens', async (req, res) => {
