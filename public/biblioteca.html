@@ -5,16 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biblioteca Digital - CAPS Digital</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <div class="container">
         <div class="content-page">
-            <a href="index.html" class="back-button">← Voltar</a>
-            <h1 class="page-title">📚 Biblioteca Digital</h1>
+            <a href="index.html" class="back-button">
+                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
+            </a>
+            <h1 class="page-title">
+                <i class="ph ph-book-open ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                Biblioteca Digital
+            </h1>
             
             <div id="biblioteca-container" class="content-grid">
                 <div class="empty-state">
-                    <div class="icon">📖</div>
+                    <div class="icon">
+                        <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 4rem;"></i>
+                    </div>
                     <p>Carregando conteúdo...</p>
                 </div>
             </div>
@@ -32,7 +40,9 @@
                 if (itens.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
-                            <div class="icon">📖</div>
+                            <div class="icon">
+                                <i class="ph ph-cloud-slash ph-duotone" style="font-size: 4rem;"></i>
+                            </div>
                             <p>Nenhum conteúdo disponível no momento.</p>
                         </div>
                     `;
@@ -48,9 +58,20 @@
                         return (match && match[2].length === 11) ? match[2] : null;
                     }
 
+                    // Ícone baseado no tipo
+                    let tipoIcon = 'file';
+                    if (item.tipo === 'Vídeo') tipoIcon = 'play-circle';
+                    else if (item.tipo === 'Áudio') tipoIcon = 'speaker-high';
+                    else if (item.tipo === 'PDF') tipoIcon = 'file-pdf';
+                    else if (item.tipo === 'Link') tipoIcon = 'link';
+                    else if (item.tipo === 'Artigo') tipoIcon = 'article';
+                    
                     let conteudo = `
                         <div class="content-item">
-                            <h3>${item.titulo}</h3>
+                            <h3>
+                                <i class="ph ph-${tipoIcon} ph-duotone" style="font-size: 1.5rem; vertical-align: middle; margin-right: 8px; color: var(--primary-color);"></i>
+                                ${item.titulo}
+                            </h3>
                             ${item.descricao ? `<p>${item.descricao}</p>` : ''}
                             <p class="meta">Tipo: ${item.tipo}</p>
                     `;
@@ -87,7 +108,9 @@
                 console.error('Erro ao carregar biblioteca:', error);
                 document.getElementById('biblioteca-container').innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">⚠️</div>
+                        <div class="icon">
+                            <i class="ph ph-warning ph-duotone" style="font-size: 4rem;"></i>
+                        </div>
                         <p>Erro ao carregar conteúdo. Tente novamente mais tarde.</p>
                     </div>
                 `;
@@ -96,6 +119,15 @@
         
         carregarBiblioteca();
     </script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .ph-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
 </body>
 </html>
 

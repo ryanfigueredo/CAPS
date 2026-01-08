@@ -85,6 +85,13 @@ main {
 .menu-card .icon {
     font-size: 4rem;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu-card .icon i {
+    color: var(--primary-color);
 }
 
 .menu-card h2 {
@@ -116,7 +123,9 @@ footer {
 }
 
 .back-button {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     margin-bottom: 20px;
     color: var(--primary-color);
     text-decoration: none;
@@ -207,6 +216,31 @@ footer {
 .empty-state .icon {
     font-size: 4rem;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-state .icon i {
+    color: var(--primary-color);
+    opacity: 0.7;
+}
+
+/* Estilos para ícones Phosphor */
+.ph {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+/* Animação de spin para loading */
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.ph-spin {
+    animation: spin 1s linear infinite;
 }
 
 /* Admin styles */
@@ -303,6 +337,13 @@ footer {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn i {
+    line-height: 1;
 }
 
 .btn-primary {

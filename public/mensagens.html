@@ -5,16 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mensagens Motivacionais - CAPS Digital</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <div class="container">
         <div class="content-page">
-            <a href="index.html" class="back-button">← Voltar</a>
-            <h1 class="page-title">💬 Mensagens Motivacionais</h1>
+            <a href="index.html" class="back-button">
+                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
+            </a>
+            <h1 class="page-title">
+                <i class="ph ph-chat-circle-dots ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                Mensagens Motivacionais
+            </h1>
             
             <div id="mensagens-container" class="content-grid">
                 <div class="empty-state">
-                    <div class="icon">💭</div>
+                    <div class="icon">
+                        <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 4rem;"></i>
+                    </div>
                     <p>Carregando mensagens...</p>
                 </div>
             </div>
@@ -32,7 +40,9 @@
                 if (mensagens.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
-                            <div class="icon">💭</div>
+                            <div class="icon">
+                                <i class="ph ph-cloud-slash ph-duotone" style="font-size: 4rem;"></i>
+                            </div>
                             <p>Nenhuma mensagem disponível no momento.</p>
                         </div>
                     `;
@@ -41,7 +51,10 @@
                 
                 container.innerHTML = mensagens.map(msg => `
                     <div class="content-item">
-                        <h3>${msg.titulo}</h3>
+                        <h3>
+                            <i class="ph ph-quote ph-duotone" style="font-size: 1.5rem; vertical-align: middle; margin-right: 8px; color: var(--primary-color);"></i>
+                            ${msg.titulo}
+                        </h3>
                         <p>${msg.conteudo}</p>
                         ${msg.autor ? `<p class="meta">— ${msg.autor}</p>` : ''}
                     </div>
@@ -50,7 +63,9 @@
                 console.error('Erro ao carregar mensagens:', error);
                 document.getElementById('mensagens-container').innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">⚠️</div>
+                        <div class="icon">
+                            <i class="ph ph-warning ph-duotone" style="font-size: 4rem;"></i>
+                        </div>
                         <p>Erro ao carregar mensagens. Tente novamente mais tarde.</p>
                     </div>
                 `;
@@ -59,6 +74,15 @@
         
         carregarMensagens();
     </script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .ph-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
 </body>
 </html>
 

@@ -5,16 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meditação Guiada - CAPS Digital</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <div class="container">
         <div class="content-page">
-            <a href="index.html" class="back-button">← Voltar</a>
-            <h1 class="page-title">🧘 Meditação Guiada</h1>
+            <a href="index.html" class="back-button">
+                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
+            </a>
+            <h1 class="page-title">
+                <i class="ph ph-yoga ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                Meditação Guiada
+            </h1>
             
             <div id="meditacoes-container" class="content-grid">
                 <div class="empty-state">
-                    <div class="icon">🧘</div>
+                    <div class="icon">
+                        <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 4rem;"></i>
+                    </div>
                     <p>Carregando meditações...</p>
                 </div>
             </div>
@@ -32,7 +40,9 @@
                 if (meditacoes.length === 0) {
                     container.innerHTML = `
                         <div class="empty-state">
-                            <div class="icon">🧘</div>
+                            <div class="icon">
+                                <i class="ph ph-cloud-slash ph-duotone" style="font-size: 4rem;"></i>
+                            </div>
                             <p>Nenhuma meditação disponível no momento.</p>
                         </div>
                     `;
@@ -74,11 +84,18 @@
                         `;
                     }
 
+                    const mediaIcon = med.url_youtube 
+                        ? '<i class="ph ph-play-circle ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px; color: var(--accent-color);"></i>'
+                        : '<i class="ph ph-speaker-high ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px; color: var(--primary-color);"></i>';
+                    
                     return `
                         <div class="content-item">
-                            <h3>${med.titulo}</h3>
+                            <h3>
+                                <i class="ph ph-yoga ph-duotone" style="font-size: 1.5rem; vertical-align: middle; margin-right: 8px; color: var(--primary-color);"></i>
+                                ${med.titulo}
+                            </h3>
                             ${med.descricao ? `<p>${med.descricao}</p>` : ''}
-                            ${med.duracao ? `<p class="meta">Duração: ${med.duracao} minutos</p>` : ''}
+                            ${med.duracao ? `<p class="meta"><i class="ph ph-clock ph-duotone" style="font-size: 0.9rem; vertical-align: middle; margin-right: 5px;"></i>Duração: ${med.duracao} minutos</p>` : ''}
                             ${mediaContent}
                         </div>
                     `;
@@ -87,7 +104,9 @@
                 console.error('Erro ao carregar meditações:', error);
                 document.getElementById('meditacoes-container').innerHTML = `
                     <div class="empty-state">
-                        <div class="icon">⚠️</div>
+                        <div class="icon">
+                            <i class="ph ph-warning ph-duotone" style="font-size: 4rem;"></i>
+                        </div>
                         <p>Erro ao carregar meditações. Tente novamente mais tarde.</p>
                     </div>
                 `;
@@ -96,6 +115,15 @@
         
         carregarMeditacoes();
     </script>
+    <style>
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .ph-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
 </body>
 </html>
 

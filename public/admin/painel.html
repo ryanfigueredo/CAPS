@@ -5,19 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Admin - CAPS Digital</title>
     <link rel="stylesheet" href="../styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 </head>
 <body>
     <div class="admin-container">
         <div class="admin-header">
-            <h1>Painel Administrativo - CAPS Digital</h1>
-            <a href="/" class="btn btn-primary" style="text-decoration: none;">Ver Site</a>
+            <h1>
+                <i class="ph ph-lock ph-duotone" style="font-size: 1.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                Painel Administrativo - CAPS Digital
+            </h1>
+            <a href="/" class="btn btn-primary" style="text-decoration: none;">
+                <i class="ph ph-house ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                Ver Site
+            </a>
         </div>
 
         <div class="admin-tabs">
-            <button class="tab-button active" onclick="mostrarAba('mensagens')">Mensagens</button>
-            <button class="tab-button" onclick="mostrarAba('biblioteca')">Biblioteca</button>
-            <button class="tab-button" onclick="mostrarAba('meditacoes')">Meditações</button>
-            <button class="tab-button" onclick="mostrarAba('quiz')">Questionários</button>
+            <button class="tab-button active" onclick="mostrarAba('mensagens')">
+                <i class="ph ph-chat-circle-dots ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                Mensagens
+            </button>
+            <button class="tab-button" onclick="mostrarAba('biblioteca')">
+                <i class="ph ph-book-open ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                Biblioteca
+            </button>
+            <button class="tab-button" onclick="mostrarAba('meditacoes')">
+                <i class="ph ph-yoga ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                Meditações
+            </button>
+            <button class="tab-button" onclick="mostrarAba('quiz')">
+                <i class="ph ph-clipboard-text ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                Questionários
+            </button>
         </div>
 
         <div id="alert-container"></div>
@@ -39,7 +58,9 @@
                         <label for="msg-autor">Autor (opcional)</label>
                         <input type="text" id="msg-autor">
                     </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Mensagem</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-plus-circle ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Adicionar Mensagem
+                    </button>
                 </form>
             </div>
 
@@ -80,7 +101,9 @@
                         <label for="bib-arquivo">Nome do arquivo (opcional)</label>
                         <input type="text" id="bib-arquivo" placeholder="arquivo.pdf">
                     </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Item</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-plus-circle ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Adicionar Item
+                    </button>
                 </form>
             </div>
 
@@ -121,7 +144,9 @@
                         <label for="med-imagem">URL da imagem (opcional)</label>
                         <input type="url" id="med-imagem" placeholder="https://...">
                     </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Meditação</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ph ph-plus-circle ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Adicionar Meditação
+                    </button>
                 </form>
             </div>
 
@@ -222,8 +247,12 @@
                             ${msg.autor ? `<p style="font-size: 0.8rem; color: #999;">Autor: ${msg.autor}</p>` : ''}
                         </div>
                         <div class="item-actions">
-                            <button onclick="editarMensagem(${msg.id})" class="btn btn-primary btn-small">Editar</button>
-                            <button onclick="deletarMensagem(${msg.id})" class="btn btn-danger btn-small">Excluir</button>
+                            <button onclick="editarMensagem(${msg.id})" class="btn btn-primary btn-small">
+                                <i class="ph ph-pencil ph-bold" style="font-size: 0.9rem; vertical-align: middle; margin-right: 3px;"></i>Editar
+                            </button>
+                            <button onclick="deletarMensagem(${msg.id})" class="btn btn-danger btn-small">
+                                <i class="ph ph-trash ph-bold" style="font-size: 0.9rem; vertical-align: middle; margin-right: 3px;"></i>Excluir
+                            </button>
                         </div>
                     </div>
                 `).join('');
@@ -293,8 +322,12 @@
                             <p style="font-size: 0.8rem; color: #999;">Tipo: ${item.tipo}</p>
                         </div>
                         <div class="item-actions">
-                            <button onclick="editarBiblioteca(${item.id})" class="btn btn-primary btn-small">Editar</button>
-                            <button onclick="deletarBiblioteca(${item.id})" class="btn btn-danger btn-small">Excluir</button>
+                            <button onclick="editarBiblioteca(${item.id})" class="btn btn-primary btn-small">
+                                <i class="ph ph-pencil ph-bold" style="font-size: 0.9rem; vertical-align: middle; margin-right: 3px;"></i>Editar
+                            </button>
+                            <button onclick="deletarBiblioteca(${item.id})" class="btn btn-danger btn-small">
+                                <i class="ph ph-trash ph-bold" style="font-size: 0.9rem; vertical-align: middle; margin-right: 3px;"></i>Excluir
+                            </button>
                         </div>
                     </div>
                 `).join('');
@@ -360,9 +393,9 @@
                 container.innerHTML = meditacoes.map(med => {
                     let tipoMidia = '';
                     if (med.url_youtube) {
-                        tipoMidia = '<span style="font-size: 0.8rem; color: #d32f2f;">📺 YouTube</span>';
+                        tipoMidia = '<span style="font-size: 0.8rem; color: #d32f2f;"><i class="ph ph-play-circle ph-duotone" style="font-size: 0.8rem; vertical-align: middle; margin-right: 3px;"></i>YouTube</span>';
                     } else if (med.arquivo_audio) {
-                        tipoMidia = '<span style="font-size: 0.8rem; color: #1976d2;">🎵 Áudio</span>';
+                        tipoMidia = '<span style="font-size: 0.8rem; color: #1976d2;"><i class="ph ph-speaker-high ph-duotone" style="font-size: 0.8rem; vertical-align: middle; margin-right: 3px;"></i>Áudio</span>';
                     }
                     
                     return `
@@ -370,12 +403,16 @@
                             <div>
                                 <h4>${med.titulo} ${med.ativo ? '' : '(Inativo)'}</h4>
                                 <p>${med.descricao || 'Sem descrição'}</p>
-                                ${med.duracao ? `<p style="font-size: 0.8rem; color: #999;">Duração: ${med.duracao} minutos</p>` : ''}
+                                ${med.duracao ? `<p style="font-size: 0.8rem; color: #999;"><i class="ph ph-clock ph-duotone" style="font-size: 0.8rem; vertical-align: middle; margin-right: 3px;"></i>Duração: ${med.duracao} minutos</p>` : ''}
                                 ${tipoMidia ? `<p style="margin-top: 5px;">${tipoMidia}</p>` : ''}
                             </div>
                             <div class="item-actions">
-                                <button onclick="editarMeditacao(${med.id})" class="btn btn-primary btn-small">Editar</button>
-                                <button onclick="deletarMeditacao(${med.id})" class="btn btn-danger btn-small">Excluir</button>
+                                <button onclick="editarMeditacao(${med.id})" class="btn btn-primary btn-small">
+                                    <i class="ph ph-pencil ph-bold" style="font-size: 0.9rem; vertical-align: middle; margin-right: 3px;"></i>Editar
+                                </button>
+                                <button onclick="deletarMeditacao(${med.id})" class="btn btn-danger btn-small">
+                                    <i class="ph ph-trash ph-bold" style="font-size: 0.9rem; vertical-align: middle; margin-right: 3px;"></i>Excluir
+                                </button>
                             </div>
                         </div>
                     `;

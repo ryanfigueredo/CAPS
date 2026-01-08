@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Questionário de Saúde - CAPS Digital</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <style>
         .quiz-container {
             background: white;
@@ -120,9 +121,15 @@
 <body>
     <div class="container">
         <div class="quiz-container">
-            <a href="index.html" class="back-button">← Voltar</a>
-            <h1 class="page-title">📋 Questionário de Saúde Mental</h1>
+            <a href="index.html" class="back-button">
+                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
+            </a>
+            <h1 class="page-title">
+                <i class="ph ph-clipboard-text ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                Questionário de Saúde Mental
+            </h1>
             <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                <i class="ph ph-shield-check ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
                 Responda as perguntas com honestidade. Seus dados são confidenciais.
             </p>
 
@@ -137,26 +144,39 @@
                 <div id="questions-container"></div>
 
                 <div class="quiz-actions">
-                    <button id="prev-btn" class="btn btn-primary" onclick="previousQuestion()" style="display: none;">← Anterior</button>
-                    <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">Próxima →</button>
-                    <button id="submit-btn" class="btn btn-success" onclick="submitQuiz()" style="display: none;">Finalizar</button>
+                    <button id="prev-btn" class="btn btn-primary" onclick="previousQuestion()" style="display: none;">
+                        <i class="ph ph-arrow-left ph-bold" style="font-size: 1rem; vertical-align: middle;"></i> Anterior
+                    </button>
+                    <button id="next-btn" class="btn btn-primary" onclick="nextQuestion()">
+                        Próxima <i class="ph ph-arrow-right ph-bold" style="font-size: 1rem; vertical-align: middle;"></i>
+                    </button>
+                    <button id="submit-btn" class="btn btn-success" onclick="submitQuiz()" style="display: none;">
+                        <i class="ph ph-check-circle ph-bold" style="font-size: 1rem; vertical-align: middle;"></i> Finalizar
+                    </button>
                 </div>
             </div>
 
             <div id="quiz-result" style="display: none;">
                 <div class="quiz-result">
-                    <h2>Obrigado por responder o questionário!</h2>
+                    <h2>
+                        <i class="ph ph-heart ph-duotone" style="font-size: 2rem; vertical-align: middle; margin-right: 10px; color: var(--accent-color);"></i>
+                        Obrigado por responder o questionário!
+                    </h2>
                     <div class="result-score" id="result-score">0</div>
                     <div class="result-message" id="result-message"></div>
                     <div class="result-recommendation" id="result-recommendation"></div>
                     <div style="margin-top: 30px;">
-                        <a href="index.html" class="btn btn-primary">Voltar ao Início</a>
+                        <a href="index.html" class="btn btn-primary">
+                            <i class="ph ph-house ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                            Voltar ao Início
+                        </a>
                     </div>
                 </div>
             </div>
 
             <div id="quiz-loading" style="text-align: center; padding: 40px;">
-                <p>Carregando questionário...</p>
+                <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 3rem; color: var(--primary-color);"></i>
+                <p style="margin-top: 15px;">Carregando questionário...</p>
             </div>
         </div>
     </div>
@@ -203,16 +223,23 @@
 
             container.innerHTML = `
                 <div class="quiz-question">
-                    <h3>${index + 1}. ${question}</h3>
+                    <h3>
+                        <i class="ph ph-question ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 8px; color: var(--primary-color);"></i>
+                        ${index + 1}. ${question}
+                    </h3>
                     <div class="quiz-options">
-                        ${options.map((opt, optIndex) => `
+                        ${options.map((opt, optIndex) => {
+                            const icons = ['circle', 'circle-dashed', 'circle-half', 'circle-half-tilt', 'circle'];
+                            return `
                             <label class="quiz-option ${currentAnswer === opt.value ? 'selected' : ''}" 
                                    onclick="selectOption(${opt.value})">
                                 <input type="radio" name="question-${index}" value="${opt.value}" 
                                        ${currentAnswer === opt.value ? 'checked' : ''}>
+                                <i class="ph ph-${icons[optIndex]} ph-duotone" style="font-size: 1rem; margin-right: 8px; color: ${currentAnswer === opt.value ? 'var(--primary-color)' : '#999'};"></i>
                                 <span>${opt.label}</span>
                             </label>
-                        `).join('')}
+                        `;
+                        }).join('')}
                     </div>
                 </div>
             `;
@@ -274,17 +301,25 @@
             const percentage = Math.round((totalScore / (questions.length * 4)) * 100);
 
             // Determinar mensagem e recomendação
-            let message, recommendation;
+            let message, recommendation, icon, iconColor;
             if (totalScore <= 13) {
+                icon = 'smiley';
+                iconColor = 'var(--secondary-color)';
                 message = "Seu bem-estar parece estar em bom estado!";
                 recommendation = "Continue cuidando da sua saúde mental. Pratique atividades que te fazem bem e mantenha uma rotina saudável.";
             } else if (totalScore <= 26) {
+                icon = 'warning-circle';
+                iconColor = '#FFA500';
                 message = "Você está apresentando alguns sinais de desconforto. É importante ficar atento aos seus sentimentos.";
                 recommendation = "Considere conversar com alguém de confiança sobre como você está se sentindo. Práticas de relaxamento e autocuidado podem ajudar.";
             } else if (totalScore <= 39) {
+                icon = 'warning';
+                iconColor = '#FF6B6B';
                 message = "Você está apresentando sinais significativos de desconforto emocional.";
                 recommendation = "Recomendamos que você busque apoio profissional. Entre em contato com o CAPS ou procure um profissional de saúde mental.";
             } else {
+                icon = 'warning-octagon';
+                iconColor = 'var(--accent-color)';
                 message = "Você está apresentando sinais importantes que merecem atenção imediata.";
                 recommendation = "É muito importante que você busque ajuda profissional o quanto antes. Entre em contato com o CAPS, procure um psicólogo ou psiquiatra, ou ligue para o CVV (188). Você não está sozinho(a).";
             }
@@ -309,9 +344,14 @@
             // Mostrar resultado
             document.getElementById('quiz-form').style.display = 'none';
             document.getElementById('quiz-result').style.display = 'block';
-            document.getElementById('result-score').textContent = totalScore + ' pontos';
-            document.getElementById('result-message').textContent = message;
-            document.getElementById('result-recommendation').innerHTML = `<strong>Recomendação:</strong><br>${recommendation}`;
+            document.getElementById('result-score').innerHTML = `
+                <i class="ph ph-${icon} ph-duotone" style="font-size: 3rem; vertical-align: middle; margin-right: 10px; color: ${iconColor};"></i>
+                ${totalScore} pontos
+            `;
+            document.getElementById('result-message').innerHTML = `<i class="ph ph-info ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 8px;"></i>${message}`;
+            document.getElementById('result-recommendation').innerHTML = `
+                <strong><i class="ph ph-lightbulb ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Recomendação:</strong><br>${recommendation}
+            `;
         }
 
         // Inicializar quando a página carregar
