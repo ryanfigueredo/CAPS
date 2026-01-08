@@ -41,6 +41,10 @@
                 <i class="ph ph-star ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
                 Avaliações
             </button>
+            <button class="tab-button" onclick="mostrarAba('rotinas')">
+                <i class="ph ph-calendar-check ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                Rotinas
+            </button>
         </div>
 
         <div id="alert-container"></div>
@@ -177,6 +181,17 @@
             </div>
         </div>
 
+        <!-- Aba Rotinas -->
+        <div id="aba-rotinas" class="aba-conteudo" style="display: none;">
+            <div class="items-list">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Rotinas Diárias dos Pacientes</h2>
+                    <button onclick="carregarRotinas()" class="btn btn-primary btn-small">Atualizar</button>
+                </div>
+                <div id="lista-rotinas"></div>
+            </div>
+        </div>
+
         <!-- Aba Questionários -->
         <div id="aba-quiz" class="aba-conteudo" style="display: none;">
             <div class="items-list">
@@ -209,6 +224,15 @@
             // Mostrar aba selecionada
             document.getElementById(`aba-${aba}`).style.display = 'block';
             event.target.classList.add('active');
+            
+            // Carregar dados quando a aba é aberta
+            if (aba === 'quiz') {
+                carregarQuiz();
+            } else if (aba === 'avaliacoes') {
+                carregarAvaliacoes();
+            } else if (aba === 'rotinas') {
+                carregarRotinas();
+            }
         }
 
         function mostrarAlerta(mensagem, tipo = 'success') {
@@ -487,15 +511,17 @@
                 }
 
                 container.innerHTML = respostas.map(resp => {
-                    const data = new Date(resp.data_criacao).toLocaleString('pt-BR');
+                    const dataCriacao = resp.dataCriacao || resp.data_criacao;
+                    const data = new Date(dataCriacao).toLocaleString('pt-BR');
                     const nivel = resp.pontuacao <= 13 ? '🟢 Baixo' : 
                                  resp.pontuacao <= 26 ? '🟡 Moderado' : 
                                  resp.pontuacao <= 39 ? '🟠 Alto' : '🔴 Muito Alto';
+                    const nomePaciente = resp.nome ? `<strong style="color: var(--primary-color);">${resp.nome}</strong> - ` : '';
                     
                     return `
                         <div class="item-card">
                             <div style="flex: 1;">
-                                <h4>Questionário - ${data}</h4>
+                                <h4>${nomePaciente}Questionário - ${data}</h4>
                                 <p><strong>Pontuação:</strong> ${resp.pontuacao} pontos (${resp.porcentagem}%)</p>
                                 <p><strong>Nível:</strong> ${nivel}</p>
                                 <details style="margin-top: 10px;">
@@ -578,7 +604,9 @@
                 }
 
                 container.innerHTML = avaliacoes.map(av => {
-                    const data = new Date(av.dataCriacao).toLocaleString('pt-BR');
+                    const dataCriacao = av.dataCriacao || av.data_criacao;
+                    const data = new Date(dataCriacao).toLocaleString('pt-BR');
+                    const nomePaciente = av.nome ? `<strong style="color: var(--primary-color);">${av.nome}</strong> - ` : '';
                     
                     function getStarRating(value) {
                         let stars = '';
@@ -595,7 +623,7 @@
                     return `
                         <div class="item-card">
                             <div style="flex: 1;">
-                                <h4>Avaliação - ${data}</h4>
+                                <h4>${nomePaciente}Avaliação - ${data}</h4>
                                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px;">
                                     <div>
                                         <p style="font-size: 0.9rem; color: #666; margin-bottom: 5px;">Atendimento</p>
@@ -640,6 +668,80 @@
             } catch (error) {
                 console.error('Erro ao carregar avaliações:', error);
                 document.getElementById('lista-avaliacoes').innerHTML = '<p>Erro ao carregar avaliações.</p>';
+            }
+        }
+
+        // Rotinas
+        async function carregarRotinas() {
+            try {
+                const response = await fetch('/api/admin/rotinas');
+                const rotinas = await response.json();
+                const container = document.getElementById('lista-rotinas');
+                
+                if (rotinas.length === 0) {
+                    container.innerHTML = '<p>Nenhuma rotina cadastrada ainda.</p>';
+                    return;
+                }
+
+                container.innerHTML = rotinas.map(rot => {
+                    const dataCriacao = rot.dataCriacao || rot.data_criacao;
+                    const data = new Date(dataCriacao).toLocaleString('pt-BR');
+                    const rotinaData = rot.rotina || {};
+                    
+                    return `
+                        <div class="item-card">
+                            <div style="flex: 1;">
+                                <h4>
+                                    <i class="ph ph-user ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 8px; color: var(--primary-color);"></i>
+                                    ${rot.nome} - ${data}
+                                </h4>
+                                ${rotinaData.manha ? `
+                                    <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
+                                            <i class="ph ph-sun ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Manhã
+                                        </p>
+                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.manha}</p>
+                                    </div>
+                                ` : ''}
+                                ${rotinaData.tarde ? `
+                                    <div style="margin-top: 10px; padding: 12px; background: #ffe0b2; border-radius: 8px; border-left: 4px solid #ff9800;">
+                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
+                                            <i class="ph ph-sun-horizon ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Tarde
+                                        </p>
+                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.tarde}</p>
+                                    </div>
+                                ` : ''}
+                                ${rotinaData.noite ? `
+                                    <div style="margin-top: 10px; padding: 12px; background: #e1bee7; border-radius: 8px; border-left: 4px solid #9c27b0;">
+                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
+                                            <i class="ph ph-moon ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Noite
+                                        </p>
+                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.noite}</p>
+                                    </div>
+                                ` : ''}
+                                ${rotinaData.sentimento ? `
+                                    <div style="margin-top: 10px; padding: 12px; background: #f8bbd0; border-radius: 8px; border-left: 4px solid #e91e63;">
+                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
+                                            <i class="ph ph-heart ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Como está se sentindo
+                                        </p>
+                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.sentimento}</p>
+                                    </div>
+                                ` : ''}
+                                ${rotinaData.observacoes ? `
+                                    <div style="margin-top: 10px; padding: 12px; background: #c5e1a5; border-radius: 8px; border-left: 4px solid #689f38;">
+                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
+                                            <i class="ph ph-note ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Observações
+                                        </p>
+                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.observacoes}</p>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar rotinas:', error);
+                document.getElementById('lista-rotinas').innerHTML = '<p>Erro ao carregar rotinas.</p>';
             }
         }
 

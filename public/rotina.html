@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Rotina - CAPS Digital</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .rotina-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .rotina-questions {
+            margin-top: 25px;
+        }
+
+        .rotina-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: var(--light-color);
+            border-radius: 10px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .rotina-question h3 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rotina-question textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .rotina-question textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .submit-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: var(--secondary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .success-message h2 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="display: flex; flex-direction: column; min-height: calc(100vh - 20px);">
+        <div class="content-page" style="flex: 1;">
+            <a href="index.html" class="back-button">
+                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
+            </a>
+            <h1 class="page-title">
+                <i class="ph ph-calendar-check ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                Minha Rotina Diária
+            </h1>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">
+                Conte como foi o seu dia para os profissionais do CAPS acompanharem
+            </p>
+
+            <div class="rotina-container">
+                <form id="rotina-form">
+                    <div class="form-group">
+                        <label for="nome-paciente">
+                            <i class="ph ph-user ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                            Seu Nome
+                        </label>
+                        <input type="text" id="nome-paciente" name="nome" required placeholder="Digite seu nome completo">
+                    </div>
+
+                    <div class="rotina-questions">
+                        <div class="rotina-question">
+                            <h3>
+                                <i class="ph ph-sun ph-duotone" style="font-size: 1.2rem; color: var(--secondary-color);"></i>
+                                Como foi a sua manhã?
+                            </h3>
+                            <textarea name="manha" placeholder="Descreva como foi sua manhã: o que você fez, como se sentiu, atividades realizadas..."></textarea>
+                        </div>
+
+                        <div class="rotina-question">
+                            <h3>
+                                <i class="ph ph-sun-horizon ph-duotone" style="font-size: 1.2rem; color: var(--accent-color);"></i>
+                                Como foi a sua tarde?
+                            </h3>
+                            <textarea name="tarde" placeholder="Descreva como foi sua tarde: atividades, encontros, como se sentiu..."></textarea>
+                        </div>
+
+                        <div class="rotina-question">
+                            <h3>
+                                <i class="ph ph-moon ph-duotone" style="font-size: 1.2rem; color: var(--primary-color);"></i>
+                                Como foi a sua noite?
+                            </h3>
+                            <textarea name="noite" placeholder="Descreva como foi sua noite: o que fez antes de dormir, como se sentiu..."></textarea>
+                        </div>
+
+                        <div class="rotina-question">
+                            <h3>
+                                <i class="ph ph-heart ph-duotone" style="font-size: 1.2rem; color: var(--accent-color);"></i>
+                                Como você está se sentindo hoje?
+                            </h3>
+                            <textarea name="sentimento" placeholder="Descreva seus sentimentos, emoções, preocupações ou coisas positivas do dia..."></textarea>
+                        </div>
+
+                        <div class="rotina-question">
+                            <h3>
+                                <i class="ph ph-note ph-duotone" style="font-size: 1.2rem; color: var(--secondary-color);"></i>
+                                Observações adicionais (opcional)
+                            </h3>
+                            <textarea name="observacoes" placeholder="Alguma coisa que gostaria de compartilhar com os profissionais do CAPS?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="submit-container">
+                        <button type="submit" class="btn btn-primary" style="padding: 15px 40px; font-size: 1rem;">
+                            <i class="ph ph-check-circle ph-bold" style="font-size: 1.2rem; vertical-align: middle; margin-right: 8px;"></i>
+                            Enviar Rotina
+                        </button>
+                    </div>
+                </form>
+
+                <div id="success-message" style="display: none;" class="success-message">
+                    <h2>
+                        <i class="ph ph-check-circle ph-bold" style="font-size: 2rem; vertical-align: middle; margin-right: 10px;"></i>
+                        Rotina Enviada com Sucesso!
+                    </h2>
+                    <p>Os profissionais do CAPS receberam suas informações e irão acompanhar.</p>
+                    <a href="index.html" class="btn" style="margin-top: 15px; background: white; color: var(--secondary-color); text-decoration: none; display: inline-block; padding: 10px 25px;">
+                        Voltar ao Início
+                    </a>
+                </div>
+            </div>
+        </div>
+        <footer style="text-align: center; color: white; padding: 15px 0; opacity: 0.8; font-size: 0.85rem; margin-top: 20px;">
+            <p>CAPS - Centro de Atenção Psicossocial</p>
+            <div class="footer-credits">
+                <p>Desenvolvido por <a href="https://dmtn.com.br" target="_blank" rel="noopener">DMTN</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('rotina-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const rotina = {
+                nome: formData.get('nome'),
+                manha: formData.get('manha') || '',
+                tarde: formData.get('tarde') || '',
+                noite: formData.get('noite') || '',
+                sentimento: formData.get('sentimento') || '',
+                observacoes: formData.get('observacoes') || ''
+            };
+
+            try {
+                const response = await fetch('/api/rotina', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(rotina)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('rotina-form').style.display = 'none';
+                    document.getElementById('success-message').style.display = 'block';
+                } else {
+                    alert('Erro ao enviar rotina. Tente novamente.');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar rotina. Tente novamente.');
+            }
+        });
+    </script>
+</body>
+</html>
+

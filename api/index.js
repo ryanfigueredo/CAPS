@@ -270,9 +270,10 @@ app.get('/api/admin/meditacoes', async (req, res) => {
 // Salvar respostas do quiz
 app.post('/api/quiz/respostas', async (req, res) => {
   try {
-    const { respostas, pontuacao, porcentagem } = req.body;
+    const { nome, respostas, pontuacao, porcentagem } = req.body;
     const resposta = await prisma.quizResposta.create({
       data: {
+        nome: nome || null,
         respostas: JSON.stringify(respostas),
         pontuacao,
         porcentagem
@@ -329,14 +330,55 @@ app.get('/api/admin/quiz/estatisticas', async (req, res) => {
   }
 });
 
+// ========== ROTAS ROTINA DIÁRIA ==========
+
+// Salvar rotina diária
+app.post('/api/rotina', async (req, res) => {
+  try {
+    const { nome, manha, tarde, noite, sentimento, observacoes } = req.body;
+    const rotina = await prisma.rotinaDiaria.create({
+      data: {
+        nome,
+        rotina: JSON.stringify({
+          manha: manha || '',
+          tarde: tarde || '',
+          noite: noite || '',
+          sentimento: sentimento || '',
+          observacoes: observacoes || ''
+        })
+      }
+    });
+    res.json({ id: rotina.id, success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Buscar todas as rotinas (admin)
+app.get('/api/admin/rotinas', async (req, res) => {
+  try {
+    const rotinas = await prisma.rotinaDiaria.findMany({
+      orderBy: { dataCriacao: 'desc' }
+    });
+    const parsedRotinas = rotinas.map(r => ({
+      ...r,
+      rotina: JSON.parse(r.rotina)
+    }));
+    res.json(parsedRotinas);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ========== ROTAS AVALIAÇÃO ==========
 
 // Salvar avaliação
 app.post('/api/avaliacao', async (req, res) => {
   try {
-    const { atendimento, recepcao, funcionarios, medico, psicologos, farmacia, recomendacao, sugestao } = req.body;
+    const { nome, atendimento, recepcao, funcionarios, medico, psicologos, farmacia, recomendacao, sugestao } = req.body;
     const avaliacao = await prisma.avaliacao.create({
       data: {
+        nome: nome || null,
         atendimento,
         recepcao,
         funcionarios,

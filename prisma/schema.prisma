@@ -59,6 +59,7 @@ model Admin {
 
 model QuizResposta {
   id          Int      @id @default(autoincrement())
+  nome        String?  // Nome do paciente
   respostas   String  // JSON string
   pontuacao   Int
   porcentagem Int
@@ -67,8 +68,18 @@ model QuizResposta {
   @@map("quiz_respostas")
 }
 
+model RotinaDiaria {
+  id          Int      @id @default(autoincrement())
+  nome        String   // Nome do paciente
+  rotina      String   // JSON string com as respostas
+  dataCriacao DateTime @default(now()) @map("data_criacao")
+  
+  @@map("rotina_diaria")
+}
+
 model Avaliacao {
   id                    Int      @id @default(autoincrement())
+  nome                  String?  // Nome do paciente (opcional)
   atendimento           Int      // 1-5 estrelas
   recepcao              Int      // 1-5 estrelas
   funcionarios          Int      // 1-5 estrelas

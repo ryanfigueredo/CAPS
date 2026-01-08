@@ -242,7 +242,27 @@
                 </div>
             </div>
 
-            <div id="quiz-loading" style="text-align: center; padding: 30px 15px;">
+            <div id="quiz-start" style="text-align: center; padding: 30px 15px;">
+                <div style="max-width: 400px; margin: 0 auto;">
+                    <div style="margin-bottom: 20px;">
+                        <label for="quiz-nome" style="display: block; text-align: left; margin-bottom: 8px; color: var(--dark-color); font-weight: 500;">
+                            <i class="ph ph-user ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                            Seu Nome (opcional)
+                        </label>
+                        <input type="text" id="quiz-nome" placeholder="Digite seu nome completo" 
+                               style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 0.95rem;">
+                    </div>
+                    <p style="margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
+                        Responda as perguntas com honestidade. Não há respostas certas ou erradas.
+                    </p>
+                    <button class="btn btn-primary" onclick="startQuiz()" style="padding: 12px 30px;">
+                        <i class="ph ph-play ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                        Começar Questionário
+                    </button>
+                </div>
+            </div>
+
+            <div id="quiz-loading" style="text-align: center; padding: 30px 15px; display: none;">
                 <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 2.5rem; color: var(--primary-color);"></i>
                 <p style="margin-top: 12px; font-size: 0.9rem;">Carregando questionário...</p>
             </div>
@@ -283,10 +303,14 @@
         let currentQuestionIndex = 0;
         let answers = new Array(questions.length).fill(null);
 
-        function initQuiz() {
-            document.getElementById('quiz-loading').style.display = 'none';
+        function startQuiz() {
+            document.getElementById('quiz-start').style.display = 'none';
             document.getElementById('quiz-form').style.display = 'block';
             showQuestion(0);
+        }
+
+        function initQuiz() {
+            // Quiz já inicia na tela de início
         }
 
         function showQuestion(index) {
@@ -400,12 +424,14 @@
 
             // Salvar no servidor
             try {
+                const nome = document.getElementById('quiz-nome')?.value || null;
                 await fetch('/api/quiz/respostas', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
+                        nome: nome,
                         respostas: answers,
                         pontuacao: totalScore,
                         porcentagem: percentage
@@ -430,7 +456,7 @@
 
         // Inicializar quando a página carregar
         window.addEventListener('load', () => {
-            setTimeout(initQuiz, 500);
+            // Quiz já inicia na tela de início
         });
     </script>
 </body>
