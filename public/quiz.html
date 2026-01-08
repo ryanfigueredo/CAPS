@@ -10,24 +10,25 @@
         .quiz-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 40px;
+            padding: 15px;
             box-shadow: var(--shadow);
             max-width: 800px;
             margin: 0 auto;
         }
 
         .quiz-question {
-            margin-bottom: 30px;
-            padding: 20px;
+            margin-bottom: 20px;
+            padding: 15px;
             background: var(--light-color);
             border-radius: 10px;
             border-left: 4px solid var(--primary-color);
         }
 
         .quiz-question h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--dark-color);
-            font-size: 1.1rem;
+            font-size: 1rem;
+            line-height: 1.4;
         }
 
         .quiz-options {
@@ -65,8 +66,9 @@
         }
 
         .quiz-progress {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             text-align: center;
+            font-size: 0.9rem;
         }
 
         .progress-bar {
@@ -87,49 +89,115 @@
         .quiz-actions {
             display: flex;
             justify-content: space-between;
-            margin-top: 30px;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .quiz-actions .btn {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 0.9rem;
         }
 
         .quiz-result {
             text-align: center;
-            padding: 40px;
+            padding: 30px 15px;
         }
 
         .result-score {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: var(--primary-color);
-            margin: 20px 0;
+            margin: 15px 0;
         }
 
         .result-message {
-            font-size: 1.2rem;
-            line-height: 1.8;
+            font-size: 1rem;
+            line-height: 1.6;
             color: var(--text-color);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .result-recommendation {
             background: var(--light-color);
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             border-left: 4px solid var(--secondary-color);
-            margin-top: 20px;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 12px;
+            }
+
+            .quiz-question {
+                padding: 12px;
+                margin-bottom: 15px;
+            }
+
+            .quiz-question h3 {
+                font-size: 0.95rem;
+                margin-bottom: 10px;
+            }
+
+            .quiz-option {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+
+            .quiz-option input[type="radio"] {
+                width: 16px;
+                height: 16px;
+                margin-right: 8px;
+            }
+
+            .quiz-progress {
+                margin-bottom: 15px;
+                font-size: 0.85rem;
+            }
+
+            .quiz-actions {
+                margin-top: 15px;
+            }
+
+            .quiz-actions .btn {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+
+            .quiz-result {
+                padding: 20px 10px;
+            }
+
+            .result-score {
+                font-size: 2rem;
+            }
+
+            .result-message {
+                font-size: 0.9rem;
+            }
+
+            .result-recommendation {
+                padding: 12px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="quiz-container">
+    <div class="container" style="display: flex; flex-direction: column; min-height: calc(100vh - 20px);">
+        <div class="quiz-container" style="flex: 1;">
             <a href="index.html" class="back-button">
                 <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
             </a>
             <h1 class="page-title">
-                <i class="ph ph-clipboard-text ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                <i class="ph ph-clipboard-text ph-duotone" style="font-size: 1.8rem; vertical-align: middle; margin-right: 8px;"></i>
                 Questionário de Saúde Mental
             </h1>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">
-                <i class="ph ph-shield-check ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+            <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.85rem;">
+                <i class="ph ph-shield-check ph-duotone" style="font-size: 0.9rem; vertical-align: middle; margin-right: 5px;"></i>
                 Responda as perguntas com honestidade. Seus dados são confidenciais.
             </p>
 
@@ -174,11 +242,17 @@
                 </div>
             </div>
 
-            <div id="quiz-loading" style="text-align: center; padding: 40px;">
-                <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 3rem; color: var(--primary-color);"></i>
-                <p style="margin-top: 15px;">Carregando questionário...</p>
+            <div id="quiz-loading" style="text-align: center; padding: 30px 15px;">
+                <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 2.5rem; color: var(--primary-color);"></i>
+                <p style="margin-top: 12px; font-size: 0.9rem;">Carregando questionário...</p>
             </div>
         </div>
+        <footer style="text-align: center; color: white; padding: 15px 0; opacity: 0.8; font-size: 0.85rem; margin-top: 20px;">
+            <p>CAPS - Centro de Atenção Psicossocial</p>
+            <div class="footer-credits">
+                <p>Desenvolvido por <a href="https://dmtn.com.br" target="_blank" rel="noopener">DMTN</a></p>
+            </div>
+        </footer>
     </div>
 
     <script>
@@ -361,4 +435,5 @@
     </script>
 </body>
 </html>
+
 

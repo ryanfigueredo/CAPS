@@ -10,49 +10,56 @@
         .avaliacao-container {
             background: white;
             border-radius: var(--border-radius);
-            padding: 40px;
+            padding: 15px;
             box-shadow: var(--shadow);
             max-width: 900px;
             margin: 0 auto;
         }
 
         .avaliacao-section {
-            margin-bottom: 40px;
-            padding: 25px;
+            margin-bottom: 20px;
+            padding: 15px;
             background: var(--light-color);
-            border-radius: 15px;
-            border-left: 5px solid var(--primary-color);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
         }
 
         .avaliacao-section h3 {
-            font-size: 1.3rem;
+            font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             color: var(--dark-color);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .avaliacao-section h3 i {
+            font-size: 1.2rem;
         }
 
         .star-rating {
             display: flex;
-            gap: 15px;
+            gap: 8px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
         .star-option {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
+            padding: 10px 8px;
             background: white;
-            border: 3px solid #e0e0e0;
-            border-radius: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            min-width: 100px;
+            min-width: 70px;
+            flex: 1;
+            max-width: 90px;
             position: relative;
         }
 
@@ -88,45 +95,40 @@
         }
 
         .star-icon {
-            font-size: 3rem;
-            margin-bottom: 8px;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
         }
 
         .star-label {
             font-weight: 600;
-            font-size: 0.9rem;
-            margin-top: 5px;
+            font-size: 0.75rem;
+            margin-top: 3px;
         }
 
         .emoji-face {
-            font-size: 2rem;
-            margin-bottom: 5px;
+            font-size: 1.5rem;
+            margin-bottom: 3px;
         }
 
         .recomendacao-section {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
-            border-radius: 15px;
+            padding: 20px 15px;
+            border-radius: 12px;
             text-align: center;
         }
 
         .recomendacao-section h3 {
             color: white;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            font-size: 1rem;
         }
 
         .number-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .number-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+            gap: 6px;
+            margin-top: 15px;
         }
 
         .number-option {
@@ -135,13 +137,70 @@
             align-items: center;
             justify-content: center;
             background: rgba(255, 255, 255, 0.2);
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            font-size: 1.5rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             color: white;
+        }
+
+        @media (max-width: 768px) {
+            .avaliacao-container {
+                padding: 12px;
+            }
+
+            .avaliacao-section {
+                margin-bottom: 15px;
+                padding: 12px;
+            }
+
+            .avaliacao-section h3 {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+
+            .star-rating {
+                gap: 6px;
+            }
+
+            .star-option {
+                min-width: 60px;
+                max-width: 75px;
+                padding: 8px 5px;
+            }
+
+            .star-icon {
+                font-size: 1.5rem;
+            }
+
+            .star-label {
+                font-size: 0.7rem;
+            }
+
+            .emoji-face {
+                font-size: 1.2rem;
+            }
+
+            .number-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 5px;
+            }
+
+            .number-option {
+                font-size: 1rem;
+            }
+
+            .recomendacao-section {
+                padding: 15px 10px;
+            }
+
+            .sugestao-section textarea {
+                min-height: 100px;
+                padding: 12px;
+                font-size: 0.9rem;
+            }
         }
 
         .number-option:hover {
@@ -158,14 +217,14 @@
 
         .sugestao-section textarea {
             width: 100%;
-            min-height: 120px;
-            padding: 15px;
+            min-height: 100px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
+            font-size: 0.9rem;
             resize: vertical;
-            margin-top: 15px;
+            margin-top: 10px;
         }
 
         .sugestao-section textarea:focus {
@@ -175,9 +234,14 @@
 
         .submit-section {
             text-align: center;
-            margin-top: 40px;
-            padding-top: 30px;
+            margin-top: 25px;
+            padding-top: 20px;
             border-top: 2px solid #e0e0e0;
+        }
+
+        .submit-section .btn {
+            width: 100%;
+            max-width: 300px;
         }
 
         .success-message {
@@ -193,17 +257,17 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="avaliacao-container">
+    <div class="container" style="display: flex; flex-direction: column; min-height: calc(100vh - 20px);">
+        <div class="avaliacao-container" style="flex: 1;">
             <a href="index.html" class="back-button">
                 <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
             </a>
             <h1 class="page-title">
-                <i class="ph ph-star ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                <i class="ph ph-star ph-duotone" style="font-size: 1.8rem; vertical-align: middle; margin-right: 8px;"></i>
                 Avaliar Atendimento do CAPS
             </h1>
-            <p style="text-align: center; color: #666; margin-bottom: 30px; font-size: 1.1rem;">
-                <i class="ph ph-heart ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px; color: var(--accent-color);"></i>
+            <p style="text-align: center; color: #666; margin-bottom: 20px; font-size: 0.9rem;">
+                <i class="ph ph-heart ph-duotone" style="font-size: 0.9rem; vertical-align: middle; margin-right: 5px; color: var(--accent-color);"></i>
                 Sua opinião é muito importante para melhorarmos nosso atendimento!
             </p>
 
@@ -471,6 +535,12 @@
                 </a>
             </div>
         </div>
+        <footer style="text-align: center; color: white; padding: 15px 0; opacity: 0.8; font-size: 0.85rem; margin-top: 20px;">
+            <p>CAPS - Centro de Atenção Psicossocial</p>
+            <div class="footer-credits">
+                <p>Desenvolvido por <a href="https://dmtn.com.br" target="_blank" rel="noopener">DMTN</a></p>
+            </div>
+        </footer>
     </div>
 
     <script>
