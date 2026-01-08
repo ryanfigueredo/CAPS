@@ -335,14 +335,12 @@ app.get('/api/admin/quiz/estatisticas', async (req, res) => {
 // Salvar rotina diária
 app.post('/api/rotina', async (req, res) => {
   try {
-    const { nome, manha, tarde, noite, sentimento, observacoes } = req.body;
+    const { nome, atividades, sentimento, observacoes } = req.body;
     const rotina = await prisma.rotinaDiaria.create({
       data: {
         nome,
         rotina: JSON.stringify({
-          manha: manha || '',
-          tarde: tarde || '',
-          noite: noite || '',
+          atividades: atividades || {},
           sentimento: sentimento || '',
           observacoes: observacoes || ''
         })

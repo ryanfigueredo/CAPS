@@ -87,6 +87,50 @@
             border-color: var(--secondary-color);
         }
 
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checklist-item:hover {
+            border-color: var(--secondary-color);
+            background: #f0f9ff;
+        }
+
+        .checklist-item.checked {
+            border-color: var(--secondary-color);
+            background: #e8f5e9;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: var(--secondary-color);
+        }
+
+        .checklist-item label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checklist-item label i {
+            font-size: 1.2rem;
+        }
+
         .submit-container {
             margin-top: 30px;
             text-align: center;
@@ -134,26 +178,72 @@
                     <div class="rotina-questions">
                         <div class="rotina-question">
                             <h3>
-                                <i class="ph ph-sun ph-duotone" style="font-size: 1.2rem; color: var(--secondary-color);"></i>
-                                Como foi a sua manhã?
+                                <i class="ph ph-check-square ph-duotone" style="font-size: 1.2rem; color: var(--secondary-color);"></i>
+                                O que você fez hoje?
                             </h3>
-                            <textarea name="manha" placeholder="Descreva como foi sua manhã: o que você fez, como se sentiu, atividades realizadas..."></textarea>
-                        </div>
-
-                        <div class="rotina-question">
-                            <h3>
-                                <i class="ph ph-sun-horizon ph-duotone" style="font-size: 1.2rem; color: var(--accent-color);"></i>
-                                Como foi a sua tarde?
-                            </h3>
-                            <textarea name="tarde" placeholder="Descreva como foi sua tarde: atividades, encontros, como se sentiu..."></textarea>
-                        </div>
-
-                        <div class="rotina-question">
-                            <h3>
-                                <i class="ph ph-moon ph-duotone" style="font-size: 1.2rem; color: var(--primary-color);"></i>
-                                Como foi a sua noite?
-                            </h3>
-                            <textarea name="noite" placeholder="Descreva como foi sua noite: o que fez antes de dormir, como se sentiu..."></textarea>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="tomou-banho" name="tomou_banho" value="sim">
+                                <label for="tomou-banho">
+                                    <i class="ph ph-drop ph-duotone" style="color: #2196F3;"></i>
+                                    Tomou banho
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="tomou-agua" name="tomou_agua" value="sim">
+                                <label for="tomou-agua">
+                                    <i class="ph ph-drop ph-duotone" style="color: #00BCD4;"></i>
+                                    Tomou água
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="comeu" name="comeu" value="sim">
+                                <label for="comeu">
+                                    <i class="ph ph-fork-knife ph-duotone" style="color: #FF9800;"></i>
+                                    Comeu (fez as refeições)
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="tomou-remedio" name="tomou_remedio" value="sim">
+                                <label for="tomou-remedio">
+                                    <i class="ph ph-pill ph-duotone" style="color: #9C27B0;"></i>
+                                    Tomou os remédios
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="dormiu-bem" name="dormiu_bem" value="sim">
+                                <label for="dormiu-bem">
+                                    <i class="ph ph-moon ph-duotone" style="color: #673AB7;"></i>
+                                    Dormiu bem
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="saiu-casa" name="saiu_casa" value="sim">
+                                <label for="saiu-casa">
+                                    <i class="ph ph-house ph-duotone" style="color: #4CAF50;"></i>
+                                    Saiu de casa
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="fez-exercicio" name="fez_exercicio" value="sim">
+                                <label for="fez-exercicio">
+                                    <i class="ph ph-heartbeat ph-duotone" style="color: #E91E63;"></i>
+                                    Fez exercício ou caminhada
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="conversou-alguem" name="conversou_alguem" value="sim">
+                                <label for="conversou-alguem">
+                                    <i class="ph ph-chat-circle ph-duotone" style="color: #00ACC1;"></i>
+                                    Conversou com alguém
+                                </label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="fez-atividade" name="fez_atividade" value="sim">
+                                <label for="fez-atividade">
+                                    <i class="ph ph-palette ph-duotone" style="color: #FF5722;"></i>
+                                    Fez alguma atividade (ler, assistir, desenhar, etc)
+                                </label>
+                            </div>
                         </div>
 
                         <div class="rotina-question">
@@ -161,15 +251,51 @@
                                 <i class="ph ph-heart ph-duotone" style="font-size: 1.2rem; color: var(--accent-color);"></i>
                                 Como você está se sentindo hoje?
                             </h3>
-                            <textarea name="sentimento" placeholder="Descreva seus sentimentos, emoções, preocupações ou coisas positivas do dia..."></textarea>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 10px;">
+                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
+                                    <input type="radio" id="sentimento-otimo" name="sentimento" value="otimo" style="margin: 0 0 8px 0;">
+                                    <label for="sentimento-otimo" style="flex-direction: column; gap: 5px;">
+                                        <span style="font-size: 2rem;">😊</span>
+                                        <span>Ótimo</span>
+                                    </label>
+                                </div>
+                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
+                                    <input type="radio" id="sentimento-bom" name="sentimento" value="bom" style="margin: 0 0 8px 0;">
+                                    <label for="sentimento-bom" style="flex-direction: column; gap: 5px;">
+                                        <span style="font-size: 2rem;">🙂</span>
+                                        <span>Bom</span>
+                                    </label>
+                                </div>
+                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
+                                    <input type="radio" id="sentimento-normal" name="sentimento" value="normal" style="margin: 0 0 8px 0;">
+                                    <label for="sentimento-normal" style="flex-direction: column; gap: 5px;">
+                                        <span style="font-size: 2rem;">😐</span>
+                                        <span>Normal</span>
+                                    </label>
+                                </div>
+                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
+                                    <input type="radio" id="sentimento-ruim" name="sentimento" value="ruim" style="margin: 0 0 8px 0;">
+                                    <label for="sentimento-ruim" style="flex-direction: column; gap: 5px;">
+                                        <span style="font-size: 2rem;">😞</span>
+                                        <span>Ruim</span>
+                                    </label>
+                                </div>
+                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
+                                    <input type="radio" id="sentimento-pessimo" name="sentimento" value="pessimo" style="margin: 0 0 8px 0;">
+                                    <label for="sentimento-pessimo" style="flex-direction: column; gap: 5px;">
+                                        <span style="font-size: 2rem;">😢</span>
+                                        <span>Péssimo</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="rotina-question">
                             <h3>
                                 <i class="ph ph-note ph-duotone" style="font-size: 1.2rem; color: var(--secondary-color);"></i>
-                                Observações adicionais (opcional)
+                                Quer contar mais alguma coisa? (opcional)
                             </h3>
-                            <textarea name="observacoes" placeholder="Alguma coisa que gostaria de compartilhar com os profissionais do CAPS?"></textarea>
+                            <textarea name="observacoes" placeholder="Se quiser, pode escrever mais sobre seu dia, como se sentiu, o que aconteceu..."></textarea>
                         </div>
                     </div>
 
@@ -202,15 +328,52 @@
     </div>
 
     <script>
+        // Adicionar efeito visual nos checkboxes
+        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    this.closest('.checklist-item').classList.add('checked');
+                } else {
+                    this.closest('.checklist-item').classList.remove('checked');
+                }
+            });
+        });
+
+        // Adicionar efeito visual nos radio buttons
+        document.querySelectorAll('.checklist-item input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remover checked de todos
+                document.querySelectorAll('.checklist-item input[type="radio"]').forEach(r => {
+                    r.closest('.checklist-item').classList.remove('checked');
+                });
+                // Adicionar checked no selecionado
+                if (this.checked) {
+                    this.closest('.checklist-item').classList.add('checked');
+                }
+            });
+        });
+
         document.getElementById('rotina-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const formData = new FormData(e.target);
+            
+            // Coletar checkboxes
+            const atividades = {
+                tomou_banho: formData.get('tomou_banho') === 'sim',
+                tomou_agua: formData.get('tomou_agua') === 'sim',
+                comeu: formData.get('comeu') === 'sim',
+                tomou_remedio: formData.get('tomou_remedio') === 'sim',
+                dormiu_bem: formData.get('dormiu_bem') === 'sim',
+                saiu_casa: formData.get('saiu_casa') === 'sim',
+                fez_exercicio: formData.get('fez_exercicio') === 'sim',
+                conversou_alguem: formData.get('conversou_alguem') === 'sim',
+                fez_atividade: formData.get('fez_atividade') === 'sim'
+            };
+            
             const rotina = {
                 nome: formData.get('nome'),
-                manha: formData.get('manha') || '',
-                tarde: formData.get('tarde') || '',
-                noite: formData.get('noite') || '',
+                atividades: atividades,
                 sentimento: formData.get('sentimento') || '',
                 observacoes: formData.get('observacoes') || ''
             };

@@ -687,6 +687,31 @@
                     const dataCriacao = rot.dataCriacao || rot.data_criacao;
                     const data = new Date(dataCriacao).toLocaleString('pt-BR');
                     const rotinaData = rot.rotina || {};
+                    const atividades = rotinaData.atividades || {};
+                    
+                    // Mapear atividades
+                    const atividadesLabels = {
+                        tomou_banho: { label: 'Tomou banho', icon: 'ph-drop', color: '#2196F3' },
+                        tomou_agua: { label: 'Tomou água', icon: 'ph-drop', color: '#00BCD4' },
+                        comeu: { label: 'Comeu (fez as refeições)', icon: 'ph-fork-knife', color: '#FF9800' },
+                        tomou_remedio: { label: 'Tomou os remédios', icon: 'ph-pill', color: '#9C27B0' },
+                        dormiu_bem: { label: 'Dormiu bem', icon: 'ph-moon', color: '#673AB7' },
+                        saiu_casa: { label: 'Saiu de casa', icon: 'ph-house', color: '#4CAF50' },
+                        fez_exercicio: { label: 'Fez exercício ou caminhada', icon: 'ph-heartbeat', color: '#E91E63' },
+                        conversou_alguem: { label: 'Conversou com alguém', icon: 'ph-chat-circle', color: '#00ACC1' },
+                        fez_atividade: { label: 'Fez alguma atividade', icon: 'ph-palette', color: '#FF5722' }
+                    };
+                    
+                    const atividadesFeitas = Object.keys(atividades).filter(key => atividades[key] === true);
+                    
+                    // Mapear sentimento
+                    const sentimentoEmojis = {
+                        otimo: '😊 Ótimo',
+                        bom: '🙂 Bom',
+                        normal: '😐 Normal',
+                        ruim: '😞 Ruim',
+                        pessimo: '😢 Péssimo'
+                    };
                     
                     return `
                         <div class="item-card">
@@ -695,38 +720,35 @@
                                     <i class="ph ph-user ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 8px; color: var(--primary-color);"></i>
                                     ${rot.nome} - ${data}
                                 </h4>
-                                ${rotinaData.manha ? `
-                                    <div style="margin-top: 15px; padding: 12px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
-                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
-                                            <i class="ph ph-sun ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Manhã
+                                
+                                ${atividadesFeitas.length > 0 ? `
+                                    <div style="margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #4CAF50;">
+                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 10px; font-weight: 600;">
+                                            <i class="ph ph-check-square ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>O que fez hoje:
                                         </p>
-                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.manha}</p>
+                                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px;">
+                                            ${atividadesFeitas.map(key => {
+                                                const info = atividadesLabels[key];
+                                                return `
+                                                    <div style="display: flex; align-items: center; gap: 8px; padding: 8px; background: white; border-radius: 6px;">
+                                                        <i class="ph ${info.icon} ph-duotone" style="font-size: 1.2rem; color: ${info.color};"></i>
+                                                        <span style="font-size: 0.9rem;">${info.label}</span>
+                                                    </div>
+                                                `;
+                                            }).join('')}
+                                        </div>
                                     </div>
                                 ` : ''}
-                                ${rotinaData.tarde ? `
-                                    <div style="margin-top: 10px; padding: 12px; background: #ffe0b2; border-radius: 8px; border-left: 4px solid #ff9800;">
-                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
-                                            <i class="ph ph-sun-horizon ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Tarde
-                                        </p>
-                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.tarde}</p>
-                                    </div>
-                                ` : ''}
-                                ${rotinaData.noite ? `
-                                    <div style="margin-top: 10px; padding: 12px; background: #e1bee7; border-radius: 8px; border-left: 4px solid #9c27b0;">
-                                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
-                                            <i class="ph ph-moon ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Noite
-                                        </p>
-                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.noite}</p>
-                                    </div>
-                                ` : ''}
+                                
                                 ${rotinaData.sentimento ? `
                                     <div style="margin-top: 10px; padding: 12px; background: #f8bbd0; border-radius: 8px; border-left: 4px solid #e91e63;">
                                         <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
                                             <i class="ph ph-heart ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Como está se sentindo
                                         </p>
-                                        <p style="font-size: 0.9rem; line-height: 1.6;">${rotinaData.sentimento}</p>
+                                        <p style="font-size: 1.1rem; line-height: 1.6; font-weight: 500;">${sentimentoEmojis[rotinaData.sentimento] || rotinaData.sentimento}</p>
                                     </div>
                                 ` : ''}
+                                
                                 ${rotinaData.observacoes ? `
                                     <div style="margin-top: 10px; padding: 12px; background: #c5e1a5; border-radius: 8px; border-left: 4px solid #689f38;">
                                         <p style="font-size: 0.85rem; color: #666; margin-bottom: 5px; font-weight: 600;">
