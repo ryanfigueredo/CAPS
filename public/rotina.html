@@ -1,407 +1,645 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Minha Rotina - CAPS Digital</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        .rotina-container {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow);
-            max-width: 800px;
-            margin: 0 auto;
-        }
+      .rotina-container {
+        background: white;
+        border-radius: var(--border-radius);
+        padding: 20px;
+        box-shadow: var(--shadow);
+        max-width: 800px;
+        margin: 0 auto;
+      }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+      .form-group {
+        margin-bottom: 20px;
+      }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--dark-color);
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--dark-color);
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
 
-        .form-group input[type="text"],
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-            transition: border-color 0.3s ease;
-        }
+      .form-group input[type="text"],
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-family: "Inter", sans-serif;
+        font-size: 0.95rem;
+        transition: border-color 0.3s ease;
+      }
 
-        .form-group input[type="text"]:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-        }
+      .form-group input[type="text"]:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
 
-        .form-group textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
+      .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+      }
 
-        .rotina-questions {
-            margin-top: 25px;
-        }
+      .rotina-questions {
+        margin-top: 25px;
+      }
 
-        .rotina-question {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: var(--light-color);
-            border-radius: 10px;
-            border-left: 4px solid var(--secondary-color);
-        }
+      .rotina-question {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: var(--light-color);
+        border-radius: 10px;
+        border-left: 4px solid var(--secondary-color);
+      }
 
-        .rotina-question h3 {
-            margin-bottom: 10px;
-            color: var(--dark-color);
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+      .rotina-question h3 {
+        margin-bottom: 10px;
+        color: var(--dark-color);
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-        .rotina-question textarea {
-            width: 100%;
-            min-height: 80px;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-        }
+      .rotina-question textarea {
+        width: 100%;
+        min-height: 80px;
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-family: "Inter", sans-serif;
+        font-size: 0.9rem;
+      }
 
-        .rotina-question textarea:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-        }
+      .rotina-question textarea:focus {
+        outline: none;
+        border-color: var(--secondary-color);
+      }
 
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+      .checklist-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-        .checklist-item:hover {
-            border-color: var(--secondary-color);
-            background: #f0f9ff;
-        }
+      .checklist-item:hover {
+        border-color: var(--secondary-color);
+        background: #f0f9ff;
+      }
 
-        .checklist-item.checked {
-            border-color: var(--secondary-color);
-            background: #e8f5e9;
-        }
+      .checklist-item.checked {
+        border-color: var(--secondary-color);
+        background: #e8f5e9;
+      }
 
-        .checklist-item input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
-            margin-right: 12px;
-            cursor: pointer;
-            accent-color: var(--secondary-color);
-        }
+      .checklist-item input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+        margin-right: 12px;
+        cursor: pointer;
+        accent-color: var(--secondary-color);
+      }
 
-        .checklist-item label {
-            flex: 1;
-            cursor: pointer;
-            font-size: 0.95rem;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+      .checklist-item label {
+        flex: 1;
+        cursor: pointer;
+        font-size: 0.95rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
 
-        .checklist-item label i {
-            font-size: 1.2rem;
-        }
+      .checklist-item label i {
+        font-size: 1.2rem;
+      }
 
-        .submit-container {
-            margin-top: 30px;
-            text-align: center;
-        }
+      .submit-container {
+        margin-top: 30px;
+        text-align: center;
+      }
 
-        .success-message {
-            background: var(--secondary-color);
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 20px;
-        }
+      .success-message {
+        background: var(--secondary-color);
+        color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        margin-top: 20px;
+      }
 
-        .success-message h2 {
-            margin-bottom: 10px;
-            font-size: 1.3rem;
-        }
+      .success-message h2 {
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+      }
     </style>
-</head>
-<body>
-    <div class="container" style="display: flex; flex-direction: column; min-height: calc(100vh - 20px);">
-        <div class="content-page" style="flex: 1;">
-            <a href="index.html" class="back-button">
-                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
-            </a>
-            <h1 class="page-title">
-                <i class="ph ph-calendar-check ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
-                Minha Rotina Diária
-            </h1>
-            <p style="text-align: center; color: #666; margin-bottom: 25px;">
-                Conte como foi o seu dia para os profissionais do CAPS acompanharem
-            </p>
+  </head>
+  <body>
+    <div
+      class="container"
+      style="
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 20px);
+      "
+    >
+      <div class="content-page" style="flex: 1">
+        <a href="index.html" class="back-button">
+          <i
+            class="ph ph-arrow-left ph-bold"
+            style="font-size: 1.2rem; vertical-align: middle"
+          ></i>
+          Voltar
+        </a>
+        <h1 class="page-title">
+          <i
+            class="ph ph-calendar-check ph-duotone"
+            style="
+              font-size: 2.5rem;
+              vertical-align: middle;
+              margin-right: 10px;
+            "
+          ></i>
+          Minha Rotina Diária
+        </h1>
+        <p style="text-align: center; color: #666; margin-bottom: 25px">
+          Conte como foi o seu dia para os profissionais do CAPS acompanharem
+        </p>
 
-            <div class="rotina-container">
-                <form id="rotina-form">
-                    <div class="form-group">
-                        <label for="nome-paciente">
-                            <i class="ph ph-user ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
-                            Seu Nome
-                        </label>
-                        <input type="text" id="nome-paciente" name="nome" required placeholder="Digite seu nome completo">
-                    </div>
+        <div class="rotina-container">
+          <form id="rotina-form">
+            <div class="form-group">
+              <label for="nome-paciente">
+                <i
+                  class="ph ph-user ph-duotone"
+                  style="
+                    font-size: 1rem;
+                    vertical-align: middle;
+                    margin-right: 5px;
+                  "
+                ></i>
+                Seu Nome
+              </label>
+              <input
+                type="text"
+                id="nome-paciente"
+                name="nome"
+                required
+                placeholder="Digite seu nome completo"
+              />
+            </div>
 
-                    <div class="rotina-questions">
-                        <div class="rotina-question">
-                            <h3>
-                                <i class="ph ph-check-square ph-duotone" style="font-size: 1.2rem; color: var(--secondary-color);"></i>
-                                O que você fez hoje?
-                            </h3>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="tomou-banho" name="tomou_banho" value="sim">
-                                <label for="tomou-banho">
-                                    <i class="ph ph-drop ph-duotone" style="color: #2196F3;"></i>
-                                    Tomou banho
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="tomou-agua" name="tomou_agua" value="sim">
-                                <label for="tomou-agua">
-                                    <i class="ph ph-drop ph-duotone" style="color: #00BCD4;"></i>
-                                    Tomou água
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="comeu" name="comeu" value="sim">
-                                <label for="comeu">
-                                    <i class="ph ph-fork-knife ph-duotone" style="color: #FF9800;"></i>
-                                    Comeu (fez as refeições)
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="tomou-remedio" name="tomou_remedio" value="sim">
-                                <label for="tomou-remedio">
-                                    <i class="ph ph-pill ph-duotone" style="color: #9C27B0;"></i>
-                                    Tomou os remédios
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="dormiu-bem" name="dormiu_bem" value="sim">
-                                <label for="dormiu-bem">
-                                    <i class="ph ph-moon ph-duotone" style="color: #673AB7;"></i>
-                                    Dormiu bem
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="saiu-casa" name="saiu_casa" value="sim">
-                                <label for="saiu-casa">
-                                    <i class="ph ph-house ph-duotone" style="color: #4CAF50;"></i>
-                                    Saiu de casa
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="fez-exercicio" name="fez_exercicio" value="sim">
-                                <label for="fez-exercicio">
-                                    <i class="ph ph-heartbeat ph-duotone" style="color: #E91E63;"></i>
-                                    Fez exercício ou caminhada
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="conversou-alguem" name="conversou_alguem" value="sim">
-                                <label for="conversou-alguem">
-                                    <i class="ph ph-chat-circle ph-duotone" style="color: #00ACC1;"></i>
-                                    Conversou com alguém
-                                </label>
-                            </div>
-                            <div class="checklist-item">
-                                <input type="checkbox" id="fez-atividade" name="fez_atividade" value="sim">
-                                <label for="fez-atividade">
-                                    <i class="ph ph-palette ph-duotone" style="color: #FF5722;"></i>
-                                    Fez alguma atividade (ler, assistir, desenhar, etc)
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="rotina-question">
-                            <h3>
-                                <i class="ph ph-heart ph-duotone" style="font-size: 1.2rem; color: var(--accent-color);"></i>
-                                Como você está se sentindo hoje?
-                            </h3>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 10px;">
-                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
-                                    <input type="radio" id="sentimento-otimo" name="sentimento" value="otimo" style="margin: 0 0 8px 0;">
-                                    <label for="sentimento-otimo" style="flex-direction: column; gap: 5px;">
-                                        <span style="font-size: 2rem;">😊</span>
-                                        <span>Ótimo</span>
-                                    </label>
-                                </div>
-                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
-                                    <input type="radio" id="sentimento-bom" name="sentimento" value="bom" style="margin: 0 0 8px 0;">
-                                    <label for="sentimento-bom" style="flex-direction: column; gap: 5px;">
-                                        <span style="font-size: 2rem;">🙂</span>
-                                        <span>Bom</span>
-                                    </label>
-                                </div>
-                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
-                                    <input type="radio" id="sentimento-normal" name="sentimento" value="normal" style="margin: 0 0 8px 0;">
-                                    <label for="sentimento-normal" style="flex-direction: column; gap: 5px;">
-                                        <span style="font-size: 2rem;">😐</span>
-                                        <span>Normal</span>
-                                    </label>
-                                </div>
-                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
-                                    <input type="radio" id="sentimento-ruim" name="sentimento" value="ruim" style="margin: 0 0 8px 0;">
-                                    <label for="sentimento-ruim" style="flex-direction: column; gap: 5px;">
-                                        <span style="font-size: 2rem;">😞</span>
-                                        <span>Ruim</span>
-                                    </label>
-                                </div>
-                                <div class="checklist-item" style="flex-direction: column; text-align: center; padding: 15px 10px;">
-                                    <input type="radio" id="sentimento-pessimo" name="sentimento" value="pessimo" style="margin: 0 0 8px 0;">
-                                    <label for="sentimento-pessimo" style="flex-direction: column; gap: 5px;">
-                                        <span style="font-size: 2rem;">😢</span>
-                                        <span>Péssimo</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="rotina-question">
-                            <h3>
-                                <i class="ph ph-note ph-duotone" style="font-size: 1.2rem; color: var(--secondary-color);"></i>
-                                Quer contar mais alguma coisa? (opcional)
-                            </h3>
-                            <textarea name="observacoes" placeholder="Se quiser, pode escrever mais sobre seu dia, como se sentiu, o que aconteceu..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="submit-container">
-                        <button type="submit" class="btn btn-primary" style="padding: 15px 40px; font-size: 1rem;">
-                            <i class="ph ph-check-circle ph-bold" style="font-size: 1.2rem; vertical-align: middle; margin-right: 8px;"></i>
-                            Enviar Rotina
-                        </button>
-                    </div>
-                </form>
-
-                <div id="success-message" style="display: none;" class="success-message">
-                    <h2>
-                        <i class="ph ph-check-circle ph-bold" style="font-size: 2rem; vertical-align: middle; margin-right: 10px;"></i>
-                        Rotina Enviada com Sucesso!
-                    </h2>
-                    <p>Os profissionais do CAPS receberam suas informações e irão acompanhar.</p>
-                    <a href="index.html" class="btn" style="margin-top: 15px; background: white; color: var(--secondary-color); text-decoration: none; display: inline-block; padding: 10px 25px;">
-                        Voltar ao Início
-                    </a>
+            <div class="rotina-questions">
+              <div class="rotina-question">
+                <h3>
+                  <i
+                    class="ph ph-check-square ph-duotone"
+                    style="font-size: 1.2rem; color: var(--secondary-color)"
+                  ></i>
+                  O que você fez hoje?
+                </h3>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="tomou-banho"
+                    name="tomou_banho"
+                    value="sim"
+                  />
+                  <label for="tomou-banho">
+                    <i class="ph ph-drop ph-duotone" style="color: #2196f3"></i>
+                    Tomou banho
+                  </label>
                 </div>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="tomou-agua"
+                    name="tomou_agua"
+                    value="sim"
+                  />
+                  <label for="tomou-agua">
+                    <i class="ph ph-drop ph-duotone" style="color: #00bcd4"></i>
+                    Tomou água
+                  </label>
+                </div>
+                <div class="checklist-item">
+                  <input type="checkbox" id="comeu" name="comeu" value="sim" />
+                  <label for="comeu">
+                    <i
+                      class="ph ph-fork-knife ph-duotone"
+                      style="color: #ff9800"
+                    ></i>
+                    Comeu (fez as refeições)
+                  </label>
+                </div>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="tomou-remedio"
+                    name="tomou_remedio"
+                    value="sim"
+                  />
+                  <label for="tomou-remedio">
+                    <i class="ph ph-pill ph-duotone" style="color: #9c27b0"></i>
+                    Tomou os remédios
+                  </label>
+                </div>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="dormiu-bem"
+                    name="dormiu_bem"
+                    value="sim"
+                  />
+                  <label for="dormiu-bem">
+                    <i class="ph ph-moon ph-duotone" style="color: #673ab7"></i>
+                    Dormiu bem
+                  </label>
+                </div>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="saiu-casa"
+                    name="saiu_casa"
+                    value="sim"
+                  />
+                  <label for="saiu-casa">
+                    <i
+                      class="ph ph-house ph-duotone"
+                      style="color: #4caf50"
+                    ></i>
+                    Saiu de casa
+                  </label>
+                </div>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="fez-exercicio"
+                    name="fez_exercicio"
+                    value="sim"
+                  />
+                  <label for="fez-exercicio">
+                    <i
+                      class="ph ph-heartbeat ph-duotone"
+                      style="color: #e91e63"
+                    ></i>
+                    Fez exercício ou caminhada
+                  </label>
+                </div>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="conversou-alguem"
+                    name="conversou_alguem"
+                    value="sim"
+                  />
+                  <label for="conversou-alguem">
+                    <i
+                      class="ph ph-chat-circle ph-duotone"
+                      style="color: #00acc1"
+                    ></i>
+                    Conversou com alguém
+                  </label>
+                </div>
+                <div class="checklist-item">
+                  <input
+                    type="checkbox"
+                    id="fez-atividade"
+                    name="fez_atividade"
+                    value="sim"
+                  />
+                  <label for="fez-atividade">
+                    <i
+                      class="ph ph-palette ph-duotone"
+                      style="color: #ff5722"
+                    ></i>
+                    Fez alguma atividade (ler, assistir, desenhar, etc)
+                  </label>
+                </div>
+              </div>
+
+              <div class="rotina-question">
+                <h3>
+                  <i
+                    class="ph ph-heart ph-duotone"
+                    style="font-size: 1.2rem; color: var(--accent-color)"
+                  ></i>
+                  Como você está se sentindo hoje?
+                </h3>
+                <div
+                  style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                    gap: 10px;
+                    margin-top: 10px;
+                  "
+                >
+                  <div
+                    class="checklist-item"
+                    style="
+                      flex-direction: column;
+                      text-align: center;
+                      padding: 15px 10px;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      id="sentimento-otimo"
+                      name="sentimento"
+                      value="otimo"
+                      style="margin: 0 0 8px 0"
+                    />
+                    <label
+                      for="sentimento-otimo"
+                      style="flex-direction: column; gap: 5px"
+                    >
+                      <span style="font-size: 2rem">😊</span>
+                      <span>Ótimo</span>
+                    </label>
+                  </div>
+                  <div
+                    class="checklist-item"
+                    style="
+                      flex-direction: column;
+                      text-align: center;
+                      padding: 15px 10px;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      id="sentimento-bom"
+                      name="sentimento"
+                      value="bom"
+                      style="margin: 0 0 8px 0"
+                    />
+                    <label
+                      for="sentimento-bom"
+                      style="flex-direction: column; gap: 5px"
+                    >
+                      <span style="font-size: 2rem">🙂</span>
+                      <span>Bom</span>
+                    </label>
+                  </div>
+                  <div
+                    class="checklist-item"
+                    style="
+                      flex-direction: column;
+                      text-align: center;
+                      padding: 15px 10px;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      id="sentimento-normal"
+                      name="sentimento"
+                      value="normal"
+                      style="margin: 0 0 8px 0"
+                    />
+                    <label
+                      for="sentimento-normal"
+                      style="flex-direction: column; gap: 5px"
+                    >
+                      <span style="font-size: 2rem">😐</span>
+                      <span>Normal</span>
+                    </label>
+                  </div>
+                  <div
+                    class="checklist-item"
+                    style="
+                      flex-direction: column;
+                      text-align: center;
+                      padding: 15px 10px;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      id="sentimento-ruim"
+                      name="sentimento"
+                      value="ruim"
+                      style="margin: 0 0 8px 0"
+                    />
+                    <label
+                      for="sentimento-ruim"
+                      style="flex-direction: column; gap: 5px"
+                    >
+                      <span style="font-size: 2rem">😞</span>
+                      <span>Ruim</span>
+                    </label>
+                  </div>
+                  <div
+                    class="checklist-item"
+                    style="
+                      flex-direction: column;
+                      text-align: center;
+                      padding: 15px 10px;
+                    "
+                  >
+                    <input
+                      type="radio"
+                      id="sentimento-pessimo"
+                      name="sentimento"
+                      value="pessimo"
+                      style="margin: 0 0 8px 0"
+                    />
+                    <label
+                      for="sentimento-pessimo"
+                      style="flex-direction: column; gap: 5px"
+                    >
+                      <span style="font-size: 2rem">😢</span>
+                      <span>Péssimo</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rotina-question">
+                <h3>
+                  <i
+                    class="ph ph-note ph-duotone"
+                    style="font-size: 1.2rem; color: var(--secondary-color)"
+                  ></i>
+                  Quer contar mais alguma coisa? (opcional)
+                </h3>
+                <textarea
+                  name="observacoes"
+                  placeholder="Se quiser, pode escrever mais sobre seu dia, como se sentiu, o que aconteceu..."
+                ></textarea>
+              </div>
             </div>
+
+            <div class="submit-container">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                style="padding: 15px 40px; font-size: 1rem"
+              >
+                <i
+                  class="ph ph-check-circle ph-bold"
+                  style="
+                    font-size: 1.2rem;
+                    vertical-align: middle;
+                    margin-right: 8px;
+                  "
+                ></i>
+                Enviar Rotina
+              </button>
+            </div>
+          </form>
+
+          <div
+            id="success-message"
+            style="display: none"
+            class="success-message"
+          >
+            <h2>
+              <i
+                class="ph ph-check-circle ph-bold"
+                style="
+                  font-size: 2rem;
+                  vertical-align: middle;
+                  margin-right: 10px;
+                "
+              ></i>
+              Rotina Enviada com Sucesso!
+            </h2>
+            <p>
+              Os profissionais do CAPS receberam suas informações e irão
+              acompanhar.
+            </p>
+            <a
+              href="index.html"
+              class="btn"
+              style="
+                margin-top: 15px;
+                background: white;
+                color: var(--secondary-color);
+                text-decoration: none;
+                display: inline-block;
+                padding: 10px 25px;
+              "
+            >
+              Voltar ao Início
+            </a>
+          </div>
         </div>
-        <footer>
-            <p>CAPS - Centro de Atenção Psicossocial</p>
-            <p>Plataforma digital para promoção da saúde mental e bem-estar</p>
-            <div class="footer-credits">
-                <p>Desenvolvido por <a href="https://dmtn.com.br" target="_blank" rel="noopener">DMTN</a> - Todos os direitos reservados © 2024</p>
-            </div>
-        </footer>
+      </div>
+      <footer>
+        <p>CAPS - Centro de Atenção Psicossocial</p>
+        <p>Plataforma digital para promoção da saúde mental e bem-estar</p>
+        <div class="footer-credits">
+          <p>
+            Desenvolvido por
+            <a href="https://dmtn.com.br" target="_blank" rel="noopener"
+              >DMTN</a
+            >
+            - Todos os direitos reservados © 2026
+          </p>
+        </div>
+      </footer>
     </div>
 
     <script>
-        // Adicionar efeito visual nos checkboxes
-        document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                if (this.checked) {
-                    this.closest('.checklist-item').classList.add('checked');
-                } else {
-                    this.closest('.checklist-item').classList.remove('checked');
-                }
-            });
-        });
-
-        // Adicionar efeito visual nos radio buttons
-        document.querySelectorAll('.checklist-item input[type="radio"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                // Remover checked de todos
-                document.querySelectorAll('.checklist-item input[type="radio"]').forEach(r => {
-                    r.closest('.checklist-item').classList.remove('checked');
-                });
-                // Adicionar checked no selecionado
-                if (this.checked) {
-                    this.closest('.checklist-item').classList.add('checked');
-                }
-            });
-        });
-
-        document.getElementById('rotina-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(e.target);
-            
-            // Coletar checkboxes
-            const atividades = {
-                tomou_banho: formData.get('tomou_banho') === 'sim',
-                tomou_agua: formData.get('tomou_agua') === 'sim',
-                comeu: formData.get('comeu') === 'sim',
-                tomou_remedio: formData.get('tomou_remedio') === 'sim',
-                dormiu_bem: formData.get('dormiu_bem') === 'sim',
-                saiu_casa: formData.get('saiu_casa') === 'sim',
-                fez_exercicio: formData.get('fez_exercicio') === 'sim',
-                conversou_alguem: formData.get('conversou_alguem') === 'sim',
-                fez_atividade: formData.get('fez_atividade') === 'sim'
-            };
-            
-            const rotina = {
-                nome: formData.get('nome'),
-                atividades: atividades,
-                sentimento: formData.get('sentimento') || '',
-                observacoes: formData.get('observacoes') || ''
-            };
-
-            try {
-                const response = await fetch('/api/rotina', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(rotina)
-                });
-
-                const data = await response.json();
-                
-                if (data.success) {
-                    document.getElementById('rotina-form').style.display = 'none';
-                    document.getElementById('success-message').style.display = 'block';
-                } else {
-                    alert('Erro ao enviar rotina. Tente novamente.');
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro ao enviar rotina. Tente novamente.');
+      // Adicionar efeito visual nos checkboxes
+      document
+        .querySelectorAll('.checklist-item input[type="checkbox"]')
+        .forEach((checkbox) => {
+          checkbox.addEventListener("change", function () {
+            if (this.checked) {
+              this.closest(".checklist-item").classList.add("checked");
+            } else {
+              this.closest(".checklist-item").classList.remove("checked");
             }
+          });
+        });
+
+      // Adicionar efeito visual nos radio buttons
+      document
+        .querySelectorAll('.checklist-item input[type="radio"]')
+        .forEach((radio) => {
+          radio.addEventListener("change", function () {
+            // Remover checked de todos
+            document
+              .querySelectorAll('.checklist-item input[type="radio"]')
+              .forEach((r) => {
+                r.closest(".checklist-item").classList.remove("checked");
+              });
+            // Adicionar checked no selecionado
+            if (this.checked) {
+              this.closest(".checklist-item").classList.add("checked");
+            }
+          });
+        });
+
+      document
+        .getElementById("rotina-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData(e.target);
+
+          // Coletar checkboxes
+          const atividades = {
+            tomou_banho: formData.get("tomou_banho") === "sim",
+            tomou_agua: formData.get("tomou_agua") === "sim",
+            comeu: formData.get("comeu") === "sim",
+            tomou_remedio: formData.get("tomou_remedio") === "sim",
+            dormiu_bem: formData.get("dormiu_bem") === "sim",
+            saiu_casa: formData.get("saiu_casa") === "sim",
+            fez_exercicio: formData.get("fez_exercicio") === "sim",
+            conversou_alguem: formData.get("conversou_alguem") === "sim",
+            fez_atividade: formData.get("fez_atividade") === "sim",
+          };
+
+          const rotina = {
+            nome: formData.get("nome"),
+            atividades: atividades,
+            sentimento: formData.get("sentimento") || "",
+            observacoes: formData.get("observacoes") || "",
+          };
+
+          try {
+            const response = await fetch("/api/rotina", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(rotina),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+              document.getElementById("rotina-form").style.display = "none";
+              document.getElementById("success-message").style.display =
+                "block";
+            } else {
+              alert("Erro ao enviar rotina. Tente novamente.");
+            }
+          } catch (error) {
+            console.error("Erro:", error);
+            alert("Erro ao enviar rotina. Tente novamente.");
+          }
         });
     </script>
-</body>
+  </body>
 </html>
-

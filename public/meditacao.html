@@ -1,51 +1,74 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meditação Guiada - CAPS Digital</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-</head>
-<body>
-    <div class="container" style="display: flex; flex-direction: column; min-height: calc(100vh - 20px);">
-        <div class="content-page" style="flex: 1;">
-            <a href="index.html" class="back-button">
-                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
-            </a>
-            <h1 class="page-title">
-                <i class="ph ph-lotus ph-duotone" style="font-size: 1.8rem; vertical-align: middle; margin-right: 8px;"></i>
-                Meditação Guiada
-            </h1>
-            
-            <div id="meditacoes-container" class="content-grid">
-                <div class="empty-state">
-                    <div class="icon">
-                        <i class="ph ph-spinner ph-duotone ph-spin" style="font-size: 4rem;"></i>
-                    </div>
-                    <p>Carregando meditações...</p>
-                </div>
+  </head>
+  <body>
+    <div
+      class="container"
+      style="
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 20px);
+      "
+    >
+      <div class="content-page" style="flex: 1">
+        <a href="index.html" class="back-button">
+          <i
+            class="ph ph-arrow-left ph-bold"
+            style="font-size: 1.2rem; vertical-align: middle"
+          ></i>
+          Voltar
+        </a>
+        <h1 class="page-title">
+          <i
+            class="ph ph-lotus ph-duotone"
+            style="font-size: 1.8rem; vertical-align: middle; margin-right: 8px"
+          ></i>
+          Meditação Guiada
+        </h1>
+
+        <div id="meditacoes-container" class="content-grid">
+          <div class="empty-state">
+            <div class="icon">
+              <i
+                class="ph ph-spinner ph-duotone ph-spin"
+                style="font-size: 4rem"
+              ></i>
             </div>
+            <p>Carregando meditações...</p>
+          </div>
         </div>
-        <footer>
-            <p>CAPS - Centro de Atenção Psicossocial</p>
-            <p>Plataforma digital para promoção da saúde mental e bem-estar</p>
-            <div class="footer-credits">
-                <p>Desenvolvido por <a href="https://dmtn.com.br" target="_blank" rel="noopener">DMTN</a> - Todos os direitos reservados © 2024</p>
-            </div>
-        </footer>
+      </div>
+      <footer>
+        <p>CAPS - Centro de Atenção Psicossocial</p>
+        <p>Plataforma digital para promoção da saúde mental e bem-estar</p>
+        <div class="footer-credits">
+          <p>
+            Desenvolvido por
+            <a href="https://dmtn.com.br" target="_blank" rel="noopener"
+              >DMTN</a
+            >
+            - Todos os direitos reservados © 2026
+          </p>
+        </div>
+      </footer>
     </div>
 
     <script>
-        async function carregarMeditacoes() {
-            try {
-                const response = await fetch('/api/meditacoes');
-                const meditacoes = await response.json();
-                
-                const container = document.getElementById('meditacoes-container');
-                
-                if (meditacoes.length === 0) {
-                    container.innerHTML = `
+      async function carregarMeditacoes() {
+        try {
+          const response = await fetch("/api/meditacoes");
+          const meditacoes = await response.json();
+
+          const container = document.getElementById("meditacoes-container");
+
+          if (meditacoes.length === 0) {
+            container.innerHTML = `
                         <div class="empty-state">
                             <div class="icon">
                                 <i class="ph ph-cloud-slash ph-duotone" style="font-size: 4rem;"></i>
@@ -53,25 +76,27 @@
                             <p>Nenhuma meditação disponível no momento.</p>
                         </div>
                     `;
-                    return;
-                }
-                
-                container.innerHTML = meditacoes.map(med => {
-                    // Função para extrair ID do YouTube
-                    function getYouTubeId(url) {
-                        if (!url) return null;
-                        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-                        const match = url.match(regExp);
-                        return (match && match[2].length === 11) ? match[2] : null;
-                    }
+            return;
+          }
 
-                    let mediaContent = '';
-                    // Verificar tanto urlYoutube (Prisma) quanto url_youtube (fallback)
-                    const youtubeUrl = med.urlYoutube || med.url_youtube;
-                    if (youtubeUrl) {
-                        const videoId = getYouTubeId(youtubeUrl);
-                        if (videoId) {
-                            mediaContent = `
+          container.innerHTML = meditacoes
+            .map((med) => {
+              // Função para extrair ID do YouTube
+              function getYouTubeId(url) {
+                if (!url) return null;
+                const regExp =
+                  /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+                const match = url.match(regExp);
+                return match && match[2].length === 11 ? match[2] : null;
+              }
+
+              let mediaContent = "";
+              // Verificar tanto urlYoutube (Prisma) quanto url_youtube (fallback)
+              const youtubeUrl = med.urlYoutube || med.url_youtube;
+              if (youtubeUrl) {
+                const videoId = getYouTubeId(youtubeUrl);
+                if (videoId) {
+                  mediaContent = `
                                 <div style="margin-top: 20px; margin-bottom: 15px;">
                                     <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); background: #000;">
                                         <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px;" 
@@ -84,8 +109,8 @@
                                     </div>
                                 </div>
                             `;
-                        } else {
-                            mediaContent = `
+                } else {
+                  mediaContent = `
                                 <div style="margin-top: 20px;">
                                     <a href="${youtubeUrl}" target="_blank" class="btn btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
                                         <i class="ph ph-play-circle ph-bold" style="font-size: 1.2rem;"></i>
@@ -93,10 +118,10 @@
                                     </a>
                                 </div>
                             `;
-                        }
-                    } else if (med.arquivoAudio || med.arquivo_audio) {
-                        const audioFile = med.arquivoAudio || med.arquivo_audio;
-                        mediaContent = `
+                }
+              } else if (med.arquivoAudio || med.arquivo_audio) {
+                const audioFile = med.arquivoAudio || med.arquivo_audio;
+                mediaContent = `
                             <div style="margin-top: 20px;">
                                 <audio controls class="audio-player" style="width: 100%; max-width: 500px;">
                                     <source src="/uploads/audios/${audioFile}" type="audio/mpeg">
@@ -104,27 +129,32 @@
                                 </audio>
                             </div>
                         `;
-                    }
+              }
 
-                    const mediaIcon = youtubeUrl 
-                        ? '<i class="ph ph-play-circle ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px; color: var(--accent-color);"></i>'
-                        : '<i class="ph ph-speaker-high ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px; color: var(--primary-color);"></i>';
-                    
-                    return `
+              const mediaIcon = youtubeUrl
+                ? '<i class="ph ph-play-circle ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px; color: var(--accent-color);"></i>'
+                : '<i class="ph ph-speaker-high ph-duotone" style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px; color: var(--primary-color);"></i>';
+
+              return `
                         <div class="content-item">
                             <h3>
                                 <i class="ph ph-lotus ph-duotone" style="font-size: 1.5rem; vertical-align: middle; margin-right: 8px; color: var(--primary-color);"></i>
                                 ${med.titulo}
                             </h3>
-                            ${med.descricao ? `<p>${med.descricao}</p>` : ''}
-                            ${med.duracao ? `<p class="meta"><i class="ph ph-clock ph-duotone" style="font-size: 0.9rem; vertical-align: middle; margin-right: 5px;"></i>Duração: ${med.duracao} minutos</p>` : ''}
+                            ${med.descricao ? `<p>${med.descricao}</p>` : ""}
+                            ${
+                              med.duracao
+                                ? `<p class="meta"><i class="ph ph-clock ph-duotone" style="font-size: 0.9rem; vertical-align: middle; margin-right: 5px;"></i>Duração: ${med.duracao} minutos</p>`
+                                : ""
+                            }
                             ${mediaContent}
                         </div>
                     `;
-                }).join('');
-            } catch (error) {
-                console.error('Erro ao carregar meditações:', error);
-                document.getElementById('meditacoes-container').innerHTML = `
+            })
+            .join("");
+        } catch (error) {
+          console.error("Erro ao carregar meditações:", error);
+          document.getElementById("meditacoes-container").innerHTML = `
                     <div class="empty-state">
                         <div class="icon">
                             <i class="ph ph-warning ph-duotone" style="font-size: 4rem;"></i>
@@ -132,20 +162,23 @@
                         <p>Erro ao carregar meditações. Tente novamente mais tarde.</p>
                     </div>
                 `;
-            }
         }
-        
-        carregarMeditacoes();
+      }
+
+      carregarMeditacoes();
     </script>
     <style>
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
         }
-        .ph-spin {
-            animation: spin 1s linear infinite;
+        to {
+          transform: rotate(360deg);
         }
+      }
+      .ph-spin {
+        animation: spin 1s linear infinite;
+      }
     </style>
-</body>
+  </body>
 </html>
-
