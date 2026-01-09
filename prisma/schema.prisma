@@ -17,7 +17,7 @@ model Mensagem {
   autor       String?
   dataCriacao DateTime @default(now()) @map("data_criacao")
   ativo       Int      @default(1)
-  
+
   @@map("mensagens")
 }
 
@@ -30,66 +30,74 @@ model Biblioteca {
   url         String?
   dataCriacao DateTime @default(now()) @map("data_criacao")
   ativo       Int      @default(1)
-  
+
   @@map("biblioteca")
 }
 
 model Meditacao {
-  id          Int      @id @default(autoincrement())
-  titulo      String
-  descricao   String?
-  duracao     Int?
-  arquivoAudio String? @map("arquivo_audio")
-  urlYoutube  String?  @map("url_youtube")
-  imagem      String?
-  dataCriacao DateTime @default(now()) @map("data_criacao")
-  ativo       Int      @default(1)
-  
+  id           Int      @id @default(autoincrement())
+  titulo       String
+  descricao    String?
+  duracao      Int?
+  arquivoAudio String?  @map("arquivo_audio")
+  urlYoutube   String?  @map("url_youtube")
+  imagem       String?
+  dataCriacao  DateTime @default(now()) @map("data_criacao")
+  ativo        Int      @default(1)
+
   @@map("meditacoes")
 }
 
 model Admin {
-  id     Int    @id @default(autoincrement())
-  usuario String @unique
+  id      Int     @id @default(autoincrement())
+  usuario String  @unique
   senha   String
   nome    String?
-  
+
   @@map("admins")
 }
 
 model QuizResposta {
   id          Int      @id @default(autoincrement())
-  nome        String?  // Nome do paciente
-  respostas   String  // JSON string
+  nome        String? // Nome do paciente
+  respostas   String // JSON string
   pontuacao   Int
   porcentagem Int
   dataCriacao DateTime @default(now()) @map("data_criacao")
-  
+
   @@map("quiz_respostas")
 }
 
 model RotinaDiaria {
   id          Int      @id @default(autoincrement())
-  nome        String   // Nome do paciente
-  rotina      String   // JSON string com as respostas
+  nome        String // Nome do paciente
+  rotina      String // JSON string com as respostas
   dataCriacao DateTime @default(now()) @map("data_criacao")
-  
+
   @@map("rotina_diaria")
 }
 
 model Avaliacao {
-  id                    Int      @id @default(autoincrement())
-  nome                  String?  // Nome do paciente (opcional)
-  atendimento           Int      // 1-5 estrelas
-  recepcao              Int      // 1-5 estrelas
-  funcionarios          Int      // 1-5 estrelas
-  medico                Int      // 1-5 estrelas
-  psicologos            Int      // 1-5 estrelas
-  farmacia              Int      // 1-5 estrelas
-  recomendacao          Int      // 0-10
-  sugestao              String?  // Texto livre
-  dataCriacao           DateTime @default(now()) @map("data_criacao")
-  
+  id           Int      @id @default(autoincrement())
+  nome         String? // Nome do paciente (opcional)
+  atendimento  Int // 1-5 estrelas
+  recepcao     Int // 1-5 estrelas
+  funcionarios Int // 1-5 estrelas
+  medico       Int // 1-5 estrelas
+  psicologos   Int // 1-5 estrelas
+  farmacia     Int // 1-5 estrelas
+  recomendacao Int // 0-10
+  sugestao     String? // Texto livre
+  dataCriacao  DateTime @default(now()) @map("data_criacao")
+
   @@map("avaliacoes")
 }
 
+model AvaliacaoRotina {
+  id          Int      @id @default(autoincrement())
+  nome        String? // Nome do paciente (opcional)
+  respostas   String // JSON string com todas as respostas do questionário
+  dataCriacao DateTime @default(now()) @map("data_criacao")
+
+  @@map("avaliacao_rotina")
+}

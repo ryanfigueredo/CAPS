@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação da Minha Rotina - CAPS Digital</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .avaliacao-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            font-weight: 600;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+            margin-bottom: 25px;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .question-group {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--light-color);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .question-group h3 {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            font-size: 1.05rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .radio-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .radio-option:hover {
+            border-color: var(--primary-color);
+            background: #f0f9ff;
+        }
+
+        .radio-option.selected {
+            border-color: var(--primary-color);
+            background: #e8f5e9;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .radio-option label {
+            flex: 1;
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin: 0;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+        }
+
+        .submit-container {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .success-message {
+            background: var(--secondary-color);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .success-message h2 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .success-message p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" style="display: flex; flex-direction: column; min-height: calc(100vh - 20px);">
+        <div class="content-page" style="flex: 1;">
+            <a href="index.html" class="back-button">
+                <i class="ph ph-arrow-left ph-bold" style="font-size: 1.2rem; vertical-align: middle;"></i> Voltar
+            </a>
+            <h1 class="page-title">
+                <i class="ph ph-clipboard-text ph-duotone" style="font-size: 2.5rem; vertical-align: middle; margin-right: 10px;"></i>
+                Minha Rotina no Dia a Dia
+            </h1>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">
+                Ajude-nos a entender melhor sua rotina e como podemos apoiá-lo melhor
+            </p>
+
+            <div class="avaliacao-container">
+                <form id="avaliacao-form">
+                    <div class="form-group">
+                        <label for="nome-paciente">
+                            <i class="ph ph-user ph-duotone" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>
+                            Seu Nome (opcional)
+                        </label>
+                        <input type="text" id="nome-paciente" name="nome" placeholder="Digite seu nome, se desejar">
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">1</span>
+                            Como costuma ser o seu horário de acordar?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="acordar-1" name="acordar" value="nao_tenho_horario">
+                                <label for="acordar-1">Não tenho horário certo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="acordar-2" name="acordar" value="muito_tarde_cedo">
+                                <label for="acordar-2">Acordo muito tarde ou muito cedo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="acordar-3" name="acordar" value="mais_ou_menos_fixo">
+                                <label for="acordar-3">Tenho um horário mais ou menos fixo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="acordar-4" name="acordar" value="sempre_mesmo_horario">
+                                <label for="acordar-4">Acordo sempre no mesmo horário</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">2</span>
+                            Como está o seu sono ultimamente?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="sono-1" name="sono" value="muito_mal">
+                                <label for="sono-1">Durmo muito mal</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="sono-2" name="sono" value="irregular">
+                                <label for="sono-2">Meu sono é irregular</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="sono-3" name="sono" value="as_vezes_bem">
+                                <label for="sono-3">Às vezes durmo bem</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="sono-4" name="sono" value="maioria_bem">
+                                <label for="sono-4">Na maioria dos dias durmo bem</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">3</span>
+                            Você costuma cuidar da sua higiene pessoal diariamente?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="higiene-1" name="higiene" value="muita_dificuldade">
+                                <label for="higiene-1">Tenho muita dificuldade</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="higiene-2" name="higiene" value="as_vezes_esqueco">
+                                <label for="higiene-2">Às vezes esqueço</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="higiene-3" name="higiene" value="maioria_dias">
+                                <label for="higiene-3">Consigo na maior parte dos dias</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="higiene-4" name="higiene" value="todos_dias">
+                                <label for="higiene-4">Faço todos os dias</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">4</span>
+                            Como está sua alimentação?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="alimentacao-1" name="alimentacao" value="quase_nao">
+                                <label for="alimentacao-1">Quase não me alimento</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="alimentacao-2" name="alimentacao" value="horarios_desorganizados">
+                                <label for="alimentacao-2">Como em horários desorganizados</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="alimentacao-3" name="alimentacao" value="tento_refeicoes">
+                                <label for="alimentacao-3">Tento fazer as refeições</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="alimentacao-4" name="alimentacao" value="alimento_bem">
+                                <label for="alimentacao-4">Me alimento bem e com horários</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">5</span>
+                            Você costuma sair de casa?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="sair-1" name="sair" value="quase_nunca">
+                                <label for="sair-1">Quase nunca</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="sair-2" name="sair" value="apenas_necessarias">
+                                <label for="sair-2">Apenas para coisas necessárias</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="sair-3" name="sair" value="algumas_vezes">
+                                <label for="sair-3">Saio algumas vezes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="sair-4" name="sair" value="com_frequencia">
+                                <label for="sair-4">Saio com frequência</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">6</span>
+                            Como é sua participação nas atividades do CAPS?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="caps-1" name="caps" value="nao_participo">
+                                <label for="caps-1">Não participo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="caps-2" name="caps" value="participo_pouco">
+                                <label for="caps-2">Participo pouco</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="caps-3" name="caps" value="quando_consego">
+                                <label for="caps-3">Participo quando consigo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="caps-4" name="caps" value="sempre_posso">
+                                <label for="caps-4">Participo sempre que posso</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">7</span>
+                            Você faz uso da medicação conforme orientação?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="medicacao-1" name="medicacao" value="nao_estou_usando">
+                                <label for="medicacao-1">Não estou usando</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="medicacao-2" name="medicacao" value="esqueco_frequencia">
+                                <label for="medicacao-2">Esqueço com frequência</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="medicacao-3" name="medicacao" value="as_vezes_esqueco">
+                                <label for="medicacao-3">Às vezes esqueço</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="medicacao-4" name="medicacao" value="uso_corretamente">
+                                <label for="medicacao-4">Uso corretamente</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">8</span>
+                            Quando se sente triste, ansioso(a) ou irritado(a), o que costuma fazer?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="emocao-1" name="emocao" value="fico_sozinho">
+                                <label for="emocao-1">Fico sozinho(a)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="emocao-2" name="emocao" value="choro_calado">
+                                <label for="emocao-2">Choro ou fico calado(a)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="emocao-3" name="emocao" value="procuro_alguem">
+                                <label for="emocao-3">Procuro alguém</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="emocao-4" name="emocao" value="uso_estrategias">
+                                <label for="emocao-4">Uso estratégias que me ajudam</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">9</span>
+                            Você consegue pedir ajuda quando precisa?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-1" name="ajuda" value="nao_consigo">
+                                <label for="ajuda-1">Não consigo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-2" name="ajuda" value="tenho_dificuldade">
+                                <label for="ajuda-2">Tenho dificuldade</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-3" name="ajuda" value="as_vezes_consigo">
+                                <label for="ajuda-3">Às vezes consigo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-4" name="ajuda" value="consigo_pedir">
+                                <label for="ajuda-4">Consigo pedir ajuda</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">10</span>
+                            Você realiza alguma atividade que gosta?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="atividade-1" name="atividade" value="nao_faco_nada">
+                                <label for="atividade-1">Não faço nada que gosto</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="atividade-2" name="atividade" value="raramente">
+                                <label for="atividade-2">Raramente</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="atividade-3" name="atividade" value="as_vezes">
+                                <label for="atividade-3">Às vezes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="atividade-4" name="atividade" value="com_frequencia">
+                                <label for="atividade-4">Sim, com frequência</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">11</span>
+                            Como você organiza seu dia?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="organizacao-1" name="organizacao" value="nao_organizo">
+                                <label for="organizacao-1">Não organizo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="organizacao-2" name="organizacao" value="faco_aparece">
+                                <label for="organizacao-2">Vou fazendo o que aparece</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="organizacao-3" name="organizacao" value="tento_organizar">
+                                <label for="organizacao-3">Tento me organizar</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="organizacao-4" name="organizacao" value="tenho_rotina">
+                                <label for="organizacao-4">Tenho uma rotina</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">12</span>
+                            Você tem alguém com quem pode conversar quando precisa?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="conversa-1" name="conversa" value="nao_tenho_ninguem">
+                                <label for="conversa-1">Não tenho ninguém</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="conversa-2" name="conversa" value="tenho_nao_converso">
+                                <label for="conversa-2">Tenho, mas não converso</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="conversa-3" name="conversa" value="converso_as_vezes">
+                                <label for="conversa-3">Converso às vezes</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="conversa-4" name="conversa" value="sempre_converso">
+                                <label for="conversa-4">Sempre converso</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">13</span>
+                            Como você se sente em relação ao seu tratamento?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="tratamento-1" name="tratamento" value="desanimado">
+                                <label for="tratamento-1">Desanimado(a)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="tratamento-2" name="tratamento" value="confuso">
+                                <label for="tratamento-2">Confuso(a)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="tratamento-3" name="tratamento" value="tentando_continuar">
+                                <label for="tratamento-3">Tentando continuar</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="tratamento-4" name="tratamento" value="acreditando_processo">
+                                <label for="tratamento-4">Acreditando no processo</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">14</span>
+                            Você consegue reconhecer quando não está bem?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="reconhecimento-1" name="reconhecimento" value="nao_percebo">
+                                <label for="reconhecimento-1">Não percebo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="reconhecimento-2" name="reconhecimento" value="percebo_depois">
+                                <label for="reconhecimento-2">Percebo depois de piorar</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="reconhecimento-3" name="reconhecimento" value="as_vezes_percebo">
+                                <label for="reconhecimento-3">Às vezes percebo</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="reconhecimento-4" name="reconhecimento" value="percebo_cedo">
+                                <label for="reconhecimento-4">Consigo perceber cedo</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">15</span>
+                            O que mais dificulta sua rotina hoje?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="dificuldade-1" name="dificuldade" value="falta_energia">
+                                <label for="dificuldade-1">Falta de energia</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="dificuldade-2" name="dificuldade" value="tristeza_ansiedade">
+                                <label for="dificuldade-2">Tristeza ou ansiedade</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="dificuldade-3" name="dificuldade" value="falta_apoio">
+                                <label for="dificuldade-3">Falta de apoio</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="dificuldade-4" name="dificuldade" value="muitas_coisas">
+                                <label for="dificuldade-4">Muitas coisas ao mesmo tempo</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">16</span>
+                            O que mais te ajuda no dia a dia?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-diaria-1" name="ajuda_diaria" value="medicacao">
+                                <label for="ajuda-diaria-1">Medicação</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-diaria-2" name="ajuda_diaria" value="apoio_caps">
+                                <label for="ajuda-diaria-2">Apoio do CAPS</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-diaria-3" name="ajuda_diaria" value="familia_amigos">
+                                <label for="ajuda-diaria-3">Família ou amigos</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="ajuda-diaria-4" name="ajuda_diaria" value="atividades_gosto">
+                                <label for="ajuda-diaria-4">Atividades que gosto</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">17</span>
+                            Como você se sente ao finalizar o dia?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="final-dia-1" name="final_dia" value="muito_cansado">
+                                <label for="final-dia-1">Muito cansado(a)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="final-dia-2" name="final_dia" value="insatisfeito">
+                                <label for="final-dia-2">Insatisfeito(a)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="final-dia-3" name="final_dia" value="neutro">
+                                <label for="final-dia-3">Neutro(a)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="final-dia-4" name="final_dia" value="um_pouco_melhor">
+                                <label for="final-dia-4">Um pouco melhor</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <h3>
+                            <span class="question-number">18</span>
+                            Você sente que sua rotina ajuda ou atrapalha sua saúde mental?
+                        </h3>
+                        <div class="radio-options">
+                            <div class="radio-option">
+                                <input type="radio" id="rotina-saude-1" name="rotina_saude" value="atrapalha_muito">
+                                <label for="rotina-saude-1">Atrapalha muito</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="rotina-saude-2" name="rotina_saude" value="as_vezes_atrapalha">
+                                <label for="rotina-saude-2">Às vezes atrapalha</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="rotina-saude-3" name="rotina_saude" value="nem_ajuda_atrapalha">
+                                <label for="rotina-saude-3">Nem ajuda nem atrapalha</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="rotina-saude-4" name="rotina_saude" value="ajuda_bastante">
+                                <label for="rotina-saude-4">Ajuda bastante</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-container">
+                        <button type="submit" class="btn btn-primary" style="padding: 15px 40px; font-size: 1rem;">
+                            <i class="ph ph-check-circle ph-bold" style="font-size: 1.2rem; vertical-align: middle; margin-right: 8px;"></i>
+                            Enviar Avaliação
+                        </button>
+                    </div>
+                </form>
+
+                <div id="success-message" style="display: none;" class="success-message">
+                    <h2>
+                        <i class="ph ph-check-circle ph-bold" style="font-size: 2rem; vertical-align: middle; margin-right: 10px;"></i>
+                        Avaliação Enviada com Sucesso!
+                    </h2>
+                    <p>Obrigado por compartilhar suas informações. Isso nos ajuda a entender melhor como podemos apoiá-lo.</p>
+                    <a href="index.html" class="btn" style="margin-top: 15px; background: white; color: var(--secondary-color); text-decoration: none; display: inline-block; padding: 10px 25px;">
+                        Voltar ao Início
+                    </a>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>CAPS - Centro de Atenção Psicossocial</p>
+            <p>Plataforma digital para promoção da saúde mental e bem-estar</p>
+            <div class="footer-credits">
+                <p>Desenvolvido por <a href="https://dmtn.com.br" target="_blank" rel="noopener">DMTN</a> - Todos os direitos reservados © 2024</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Adicionar efeito visual nos radio buttons
+        document.querySelectorAll('.radio-option input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remover selected de todos os irmãos
+                const questionGroup = this.closest('.question-group');
+                questionGroup.querySelectorAll('.radio-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                // Adicionar selected no selecionado
+                if (this.checked) {
+                    this.closest('.radio-option').classList.add('selected');
+                }
+            });
+        });
+
+        document.getElementById('avaliacao-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            // Coletar todas as respostas
+            const respostas = {
+                nome: formData.get('nome') || '',
+                acordar: formData.get('acordar') || '',
+                sono: formData.get('sono') || '',
+                higiene: formData.get('higiene') || '',
+                alimentacao: formData.get('alimentacao') || '',
+                sair: formData.get('sair') || '',
+                caps: formData.get('caps') || '',
+                medicacao: formData.get('medicacao') || '',
+                emocao: formData.get('emocao') || '',
+                ajuda: formData.get('ajuda') || '',
+                atividade: formData.get('atividade') || '',
+                organizacao: formData.get('organizacao') || '',
+                conversa: formData.get('conversa') || '',
+                tratamento: formData.get('tratamento') || '',
+                reconhecimento: formData.get('reconhecimento') || '',
+                dificuldade: formData.get('dificuldade') || '',
+                ajuda_diaria: formData.get('ajuda_diaria') || '',
+                final_dia: formData.get('final_dia') || '',
+                rotina_saude: formData.get('rotina_saude') || ''
+            };
+
+            try {
+                const response = await fetch('/api/rotina-avaliacao', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(respostas)
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('avaliacao-form').style.display = 'none';
+                    document.getElementById('success-message').style.display = 'block';
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    alert('Erro ao enviar avaliação. Tente novamente.');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao enviar avaliação. Tente novamente.');
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -385,6 +385,40 @@ app.get('/api/admin/rotinas', async (req, res) => {
   }
 });
 
+// ========== ROTAS AVALIAÇÃO ROTINA ==========
+
+// Salvar avaliação de rotina
+app.post('/api/rotina-avaliacao', async (req, res) => {
+  try {
+    const { nome, ...respostas } = req.body;
+    const avaliacao = await prisma.avaliacaoRotina.create({
+      data: {
+        nome: nome || null,
+        respostas: JSON.stringify(respostas)
+      }
+    });
+    res.json({ id: avaliacao.id, success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Buscar todas as avaliações de rotina (admin)
+app.get('/api/admin/rotina-avaliacoes', async (req, res) => {
+  try {
+    const avaliacoes = await prisma.avaliacaoRotina.findMany({
+      orderBy: { dataCriacao: 'desc' }
+    });
+    const parsedAvaliacoes = avaliacoes.map(a => ({
+      ...a,
+      respostas: JSON.parse(a.respostas)
+    }));
+    res.json(parsedAvaliacoes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // ========== ROTAS AVALIAÇÃO ==========
 
 // Salvar avaliação
