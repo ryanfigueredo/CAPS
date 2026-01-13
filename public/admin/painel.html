@@ -252,6 +252,7 @@
         }
 
         // Mensagens
+        let editandoMensagemId = null;
         document.getElementById('form-mensagem').addEventListener('submit', async (e) => {
             e.preventDefault();
             const dados = {
@@ -261,34 +262,49 @@
             };
 
             try {
-                const response = await fetch('/api/admin/mensagens', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
+                let response;
+                if (editandoMensagemId) {
+                    // Editar
+                    response = await fetch(`/api/admin/mensagens/${editandoMensagemId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                } else {
+                    // Criar novo
+                    response = await fetch('/api/admin/mensagens', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                }
+                
                 const data = await response.json();
                 if (data.success) {
-                    mostrarAlerta('Mensagem adicionada com sucesso!');
+                    mostrarAlerta(editandoMensagemId ? 'Mensagem atualizada com sucesso!' : 'Mensagem adicionada com sucesso!');
                     e.target.reset();
+                    editandoMensagemId = null;
+                    const submitBtn = e.target.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="ph ph-plus-circle ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Adicionar Mensagem';
                     carregarMensagens();
                 }
             } catch (error) {
-                mostrarAlerta('Erro ao adicionar mensagem', 'error');
+                mostrarAlerta('Erro ao salvar mensagem', 'error');
             }
         });
 
         async function carregarMensagens() {
             try {
                 const response = await fetch('/api/admin/mensagens');
-                const mensagens = await response.json();
+                mensagensData = await response.json();
                 const container = document.getElementById('lista-mensagens');
                 
-                if (mensagens.length === 0) {
+                if (mensagensData.length === 0) {
                     container.innerHTML = '<p>Nenhuma mensagem cadastrada.</p>';
                     return;
                 }
 
-                container.innerHTML = mensagens.map(msg => `
+                container.innerHTML = mensagensData.map(msg => `
                     <div class="item-card">
                         <div>
                             <h4>${msg.titulo} ${msg.ativo ? '' : '(Inativo)'}</h4>
@@ -324,7 +340,40 @@
             }
         }
 
+        let mensagensData = [];
+        async function editarMensagem(id) {
+            try {
+                // Buscar da lista já carregada ou recarregar se necessário
+                if (mensagensData.length === 0) {
+                    const response = await fetch('/api/admin/mensagens');
+                    mensagensData = await response.json();
+                }
+                
+                const msg = mensagensData.find(m => m.id === id);
+                if (!msg) {
+                    mostrarAlerta('Mensagem não encontrada', 'error');
+                    return;
+                }
+                
+                document.getElementById('msg-titulo').value = msg.titulo || '';
+                document.getElementById('msg-conteudo').value = msg.conteudo || '';
+                document.getElementById('msg-autor').value = msg.autor || '';
+                
+                editandoMensagemId = id;
+                
+                const form = document.getElementById('form-mensagem');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="ph ph-check ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Salvar Alterações';
+                
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (error) {
+                mostrarAlerta('Erro ao carregar mensagem para edição', 'error');
+            }
+        }
+
         // Biblioteca
+        let editandoBibliotecaId = null;
+        let bibliotecaData = [];
         document.getElementById('form-biblioteca').addEventListener('submit', async (e) => {
             e.preventDefault();
             const dados = {
@@ -336,34 +385,49 @@
             };
 
             try {
-                const response = await fetch('/api/admin/biblioteca', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
+                let response;
+                if (editandoBibliotecaId) {
+                    // Editar
+                    response = await fetch(`/api/admin/biblioteca/${editandoBibliotecaId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                } else {
+                    // Criar novo
+                    response = await fetch('/api/admin/biblioteca', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                }
+                
                 const data = await response.json();
                 if (data.success) {
-                    mostrarAlerta('Item adicionado com sucesso!');
+                    mostrarAlerta(editandoBibliotecaId ? 'Item atualizado com sucesso!' : 'Item adicionado com sucesso!');
                     e.target.reset();
+                    editandoBibliotecaId = null;
+                    const submitBtn = e.target.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="ph ph-plus-circle ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Adicionar Item';
                     carregarBiblioteca();
                 }
             } catch (error) {
-                mostrarAlerta('Erro ao adicionar item', 'error');
+                mostrarAlerta('Erro ao salvar item', 'error');
             }
         });
 
         async function carregarBiblioteca() {
             try {
                 const response = await fetch('/api/admin/biblioteca');
-                const itens = await response.json();
+                bibliotecaData = await response.json();
                 const container = document.getElementById('lista-biblioteca');
                 
-                if (itens.length === 0) {
+                if (bibliotecaData.length === 0) {
                     container.innerHTML = '<p>Nenhum item cadastrado.</p>';
                     return;
                 }
 
-                container.innerHTML = itens.map(item => `
+                container.innerHTML = bibliotecaData.map(item => `
                     <div class="item-card">
                         <div>
                             <h4>${item.titulo} ${item.ativo ? '' : '(Inativo)'}</h4>
@@ -399,7 +463,41 @@
             }
         }
 
+        async function editarBiblioteca(id) {
+            try {
+                // Buscar da lista já carregada ou recarregar se necessário
+                if (bibliotecaData.length === 0) {
+                    const response = await fetch('/api/admin/biblioteca');
+                    bibliotecaData = await response.json();
+                }
+                
+                const item = bibliotecaData.find(i => i.id === id);
+                if (!item) {
+                    mostrarAlerta('Item não encontrado', 'error');
+                    return;
+                }
+                
+                document.getElementById('bib-titulo').value = item.titulo || '';
+                document.getElementById('bib-descricao').value = item.descricao || '';
+                document.getElementById('bib-tipo').value = item.tipo || '';
+                document.getElementById('bib-url').value = item.url || '';
+                document.getElementById('bib-arquivo').value = item.arquivo || '';
+                
+                editandoBibliotecaId = id;
+                
+                const form = document.getElementById('form-biblioteca');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="ph ph-check ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Salvar Alterações';
+                
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (error) {
+                mostrarAlerta('Erro ao carregar item para edição', 'error');
+            }
+        }
+
         // Meditações
+        let editandoMeditacaoId = null;
+        let meditacoesData = [];
         document.getElementById('form-meditacao').addEventListener('submit', async (e) => {
             e.preventDefault();
             const dados = {
@@ -412,34 +510,49 @@
             };
 
             try {
-                const response = await fetch('/api/admin/meditacoes', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(dados)
-                });
+                let response;
+                if (editandoMeditacaoId) {
+                    // Editar
+                    response = await fetch(`/api/admin/meditacoes/${editandoMeditacaoId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                } else {
+                    // Criar novo
+                    response = await fetch('/api/admin/meditacoes', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(dados)
+                    });
+                }
+                
                 const data = await response.json();
                 if (data.success) {
-                    mostrarAlerta('Meditação adicionada com sucesso!');
+                    mostrarAlerta(editandoMeditacaoId ? 'Meditação atualizada com sucesso!' : 'Meditação adicionada com sucesso!');
                     e.target.reset();
+                    editandoMeditacaoId = null;
+                    const submitBtn = e.target.querySelector('button[type="submit"]');
+                    submitBtn.innerHTML = '<i class="ph ph-plus-circle ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Adicionar Meditação';
                     carregarMeditacoes();
                 }
             } catch (error) {
-                mostrarAlerta('Erro ao adicionar meditação', 'error');
+                mostrarAlerta('Erro ao salvar meditação', 'error');
             }
         });
 
         async function carregarMeditacoes() {
             try {
                 const response = await fetch('/api/admin/meditacoes');
-                const meditacoes = await response.json();
+                meditacoesData = await response.json();
                 const container = document.getElementById('lista-meditacoes');
                 
-                if (meditacoes.length === 0) {
+                if (meditacoesData.length === 0) {
                     container.innerHTML = '<p>Nenhuma meditação cadastrada.</p>';
                     return;
                 }
 
-                container.innerHTML = meditacoes.map(med => {
+                container.innerHTML = meditacoesData.map(med => {
                     let tipoMidia = '';
                     if (med.url_youtube) {
                         tipoMidia = '<span style="font-size: 0.8rem; color: #d32f2f;"><i class="ph ph-play-circle ph-duotone" style="font-size: 0.8rem; vertical-align: middle; margin-right: 3px;"></i>YouTube</span>';
@@ -482,6 +595,39 @@
                 }
             } catch (error) {
                 mostrarAlerta('Erro ao excluir meditação', 'error');
+            }
+        }
+
+        async function editarMeditacao(id) {
+            try {
+                // Buscar da lista já carregada ou recarregar se necessário
+                if (meditacoesData.length === 0) {
+                    const response = await fetch('/api/admin/meditacoes');
+                    meditacoesData = await response.json();
+                }
+                
+                const med = meditacoesData.find(m => m.id === id);
+                if (!med) {
+                    mostrarAlerta('Meditação não encontrada', 'error');
+                    return;
+                }
+                
+                document.getElementById('med-titulo').value = med.titulo || '';
+                document.getElementById('med-descricao').value = med.descricao || '';
+                document.getElementById('med-duracao').value = med.duracao || '';
+                document.getElementById('med-youtube').value = med.url_youtube || med.urlYoutube || '';
+                document.getElementById('med-audio').value = med.arquivo_audio || med.arquivoAudio || '';
+                document.getElementById('med-imagem').value = med.imagem || '';
+                
+                editandoMeditacaoId = id;
+                
+                const form = document.getElementById('form-meditacao');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.innerHTML = '<i class="ph ph-check ph-bold" style="font-size: 1rem; vertical-align: middle; margin-right: 5px;"></i>Salvar Alterações';
+                
+                form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } catch (error) {
+                mostrarAlerta('Erro ao carregar meditação para edição', 'error');
             }
         }
 
